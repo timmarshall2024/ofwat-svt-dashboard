@@ -92,12 +92,15 @@ export default function Benchmarking() {
           Compare metrics across all 20 primary appointees
         </p>
 
-        <div className="flex flex-wrap gap-4 items-start mb-6">
+        <div className="rounded-fs-md border border-fs-border bg-fs-surface p-4 shadow-fs mb-4">
+          <p className="text-xs font-medium text-fs-text mb-2">Select metric</p>
           <MetricSelector
             value={selectedMetric}
             onChange={(id) => { setSelectedMetric(id); setSelectedYear(null); setContextOpen(false) }}
-            placeholder="Search for a metric..."
           />
+        </div>
+
+        <div className="flex flex-wrap gap-4 items-center mb-6">
           {years.length > 1 && (
             <select
               className="rounded-fs-sm border border-fs-border bg-white px-3 py-2 text-sm shadow-fs focus:border-fs-primary focus:outline-none"

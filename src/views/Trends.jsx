@@ -77,11 +77,11 @@ export default function Trends() {
           Track metric performance over time across companies
         </p>
 
-        <div className="flex flex-wrap gap-4 items-start mb-4">
+        <div className="rounded-fs-md border border-fs-border bg-fs-surface p-4 shadow-fs mb-4">
+          <p className="text-xs font-medium text-fs-text mb-2">Select metric</p>
           <MetricSelector
             value={selectedMetric}
             onChange={(id) => { setSelectedMetric(id); setContextOpen(false) }}
-            placeholder="Search for a metric..."
           />
         </div>
 

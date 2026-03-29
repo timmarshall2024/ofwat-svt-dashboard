@@ -1,7 +1,7 @@
 import { useReducer, useEffect, useState, useCallback, useRef, useMemo } from 'react'
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
-  ResponsiveContainer, Cell, LineChart, Line, Legend,
+  ResponsiveContainer, Cell, LineChart, Line, Legend, ReferenceLine,
 } from 'recharts'
 
 const GREEN = '#005030'
@@ -728,7 +728,24 @@ export default function EquityBridge() {
                       <XAxis dataKey="year" tick={{ fontSize: 10 }} />
                       <YAxis yAxisId="left" tickFormatter={v => `${(v / 1000).toFixed(1)}bn`} tick={{ fontSize: 10 }} />
                       <YAxis yAxisId="right" orientation="right" tickFormatter={v => `${(v / 1000).toFixed(0)}bn`} tick={{ fontSize: 10 }} />
-                      <Tooltip formatter={(v, name) => [`£${(v / 1000).toFixed(1)}bn`, name]} />
+                      <Tooltip content={({ active, payload, label }) => {
+                        if (!active || !payload?.length) return null
+                        return (
+                          <div className="bg-white border border-fs-border rounded-fs-sm px-3 py-2 shadow-fs text-xs">
+                            <p className="font-heading font-bold text-fs-text mb-1">{label}</p>
+                            {payload.map((p, i) => (
+                              <p key={i} style={{ color: p.color }}>{p.name}: £{(p.value / 1000).toFixed(1)}bn</p>
+                            ))}
+                            {label === '2023-24' && (
+                              <p className="mt-1 text-[10px] text-fs-text-muted italic leading-snug">
+                                Group equity increased from £970.6m to £1,834.0m following an equity raise in FY2024.
+                              </p>
+                            )}
+                          </div>
+                        )
+                      }} />
+                      <ReferenceLine x="2023-24" stroke={AMBER} strokeDasharray="4 2"
+                        label={{ value: 'Equity raise FY24', position: 'top', fontSize: 9, fill: AMBER }} />
                       <Legend wrapperStyle={{ fontSize: 10 }} />
                       <Line yAxisId="left" type="monotone" dataKey="company" name="STW Ltd equity" stroke={GREEN} strokeWidth={2} dot={{ r: 4 }} />
                       <Line yAxisId="left" type="monotone" dataKey="group" name="Group equity" stroke={NAVY} strokeWidth={2} dot={{ r: 4 }} />
