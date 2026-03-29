@@ -8,6 +8,9 @@ import MetricExplorer from './views/MetricExplorer'
 import SVTvsCMA from './views/SVTvsCMA'
 import RCVJourney from './views/RCVJourney'
 import EquityBridge from './views/EquityBridge'
+import RegPrimer from './views/RegPrimer'
+import Glossary from './views/Glossary'
+import PCTracker from './views/PCTracker'
 
 export default function App() {
   return (
@@ -22,8 +25,11 @@ export default function App() {
           <Route path="/trends/:metricId" element={<Trends />} />
           <Route path="/explorer" element={<MetricExplorer />} />
           <Route path="/cma" element={<SVTvsCMA />} />
+          <Route path="/performance/pc-tracker" element={<PCTracker />} />
+          <Route path="/learn/primer" element={<RegPrimer />} />
           <Route path="/learn/rcv-journey" element={<RCVJourney />} />
           <Route path="/learn/equity-bridge" element={<EquityBridge />} />
+          <Route path="/learn/glossary" element={<Glossary />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>

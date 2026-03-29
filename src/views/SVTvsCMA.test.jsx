@@ -55,7 +55,8 @@ describe('SVTvsCMA', () => {
     )
     expect(screen.getAllByText('Severn Trent').length).toBeGreaterThan(0)
     expect(screen.getAllByText('Anglian').length).toBeGreaterThan(0)
-    expect(screen.getAllByText('Yorkshire').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('Southern').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('Wessex').length).toBeGreaterThan(0)
   })
 
   it('renders scatter chart section', () => {
@@ -74,17 +75,26 @@ describe('SVTvsCMA', () => {
       </MemoryRouter>
     )
     expect(screen.getByText('Key Takeaways')).toBeInTheDocument()
-    expect(screen.getByText(/Uniform WACC/)).toBeInTheDocument()
+    expect(screen.getByText(/WACC divergence/)).toBeInTheDocument()
   })
 
-  it('shows n/a for missing BRL bill data', () => {
+  it('renders CMA redetermination summary', () => {
     render(
       <MemoryRouter>
         <SVTvsCMA />
       </MemoryRouter>
     )
-    // BRL has null bill values, should render as 'n/a'
-    const cells = screen.getAllByText('n/a')
-    expect(cells.length).toBeGreaterThan(0)
+    expect(screen.getByText(/CMA Redetermination/)).toBeInTheDocument()
+    expect(screen.getByText(/£463 million/)).toBeInTheDocument()
+  })
+
+  it('shows CMA outcome badges', () => {
+    render(
+      <MemoryRouter>
+        <SVTvsCMA />
+      </MemoryRouter>
+    )
+    expect(screen.getAllByText('CMA: improved').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('Accepted FD').length).toBeGreaterThan(0)
   })
 })

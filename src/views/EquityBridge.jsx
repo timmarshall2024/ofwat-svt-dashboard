@@ -97,12 +97,41 @@ function StatBox({ label, value, sub }) {
 export default function EquityBridge() {
   const [state, dispatch] = useReducer(reducer, initialState)
   const [amp8Data, setAmp8Data] = useState(null)
+  const [annualActuals, setAnnualActuals] = useState(null)
+  const [selectedYear, setSelectedYear] = useState('')
 
   useEffect(() => {
     fetch('/data/rcv_amp8_detail.json').then(r => r.json()).then(setAmp8Data)
+    fetch('/data/svt_annual_report_actuals.json')
+      .then(r => r.json())
+      .then(setAnnualActuals)
+      .catch(() => {})
   }, [])
 
   const set = useCallback((field) => (value) => dispatch({ type: 'SET', field, value }), [])
+
+  // When a year is selected, populate sliders with actual values
+  useEffect(() => {
+    if (!selectedYear || !annualActuals) return
+    const actual = annualActuals.find(a => a.year === selectedYear)
+    if (!actual) return
+    const pension = actual['pension_ias19_£m']
+    const deferredTax = actual['deferred_tax_£m']
+    const rcv = actual['rcv_£m']
+    const gearing = actual['actual_gearing_pct']
+    const equity = actual['statutory_equity_£m']
+    if (pension != null) dispatch({ type: 'SET', field: 'pension', value: pension })
+    if (deferredTax != null) dispatch({ type: 'SET', field: 'deferredTax', value: deferredTax })
+    if (rcv != null) {
+      dispatch({ type: 'SET', field: 'rcvSource', value: 'custom' })
+      dispatch({ type: 'SET', field: 'rcvCustom', value: rcv })
+    }
+    if (gearing != null) dispatch({ type: 'SET', field: 'gearing', value: gearing })
+    // Pre-populate Stage 3 fields
+    if (rcv != null) dispatch({ type: 'SET', field: 'annualReportRCV', value: String(rcv) })
+    if (equity != null) dispatch({ type: 'SET', field: 'annualReportEquity', value: String(equity) })
+    dispatch({ type: 'SET', field: 'annualReportYear', value: actual.year })
+  }, [selectedYear, annualActuals])
 
   const amp8Opening = amp8Data?.years?.[0]?.rcv_nominal?.total || 14780.7
   const amp8Closing = amp8Data?.years?.[amp8Data.years.length - 1]?.rcv_nominal?.total || 20889.8
@@ -183,6 +212,38 @@ export default function EquityBridge() {
         <span className="text-fs-border">|</span>
         <StatBox label="Statutory equity" value={`£${(statutoryEquity / 1000).toFixed(1)}bn`} />
       </div>
+
+      {/* ── Year Selector ── */}
+      {annualActuals && annualActuals.length > 0 && (
+        <div className="rounded-fs-md border border-fs-border bg-white p-4 shadow-fs">
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="text-xs font-medium text-fs-text">Load actuals from SVT annual report:</span>
+            <div className="flex gap-1.5">
+              {annualActuals.map(a => (
+                <button
+                  key={a.year}
+                  onClick={() => setSelectedYear(selectedYear === a.year ? '' : a.year)}
+                  className={`px-3 py-1.5 text-xs rounded-fs-sm border transition-colors ${
+                    selectedYear === a.year
+                      ? 'bg-fs-primary text-white border-fs-primary'
+                      : 'bg-white text-fs-text border-fs-border hover:border-fs-primary'
+                  }`}
+                >
+                  {a.year}
+                </button>
+              ))}
+            </div>
+          </div>
+          {selectedYear && (
+            <div className="mt-2 text-xs px-3 py-2 rounded-fs-sm bg-fs-secondary-light border-l-4 border-fs-secondary">
+              Showing actuals from SVT Annual Report {selectedYear} — adjust sliders to model scenarios
+            </div>
+          )}
+          {!selectedYear && (
+            <div className="mt-2 text-[10px] text-fs-text-muted">Illustrative defaults — select a year to load real figures</div>
+          )}
+        </div>
+      )}
 
       {/* ── STAGE 1: RCV to Regulated Equity ── */}
       <section>

@@ -1,0 +1,106 @@
+@media print {
+  /* Hide navigation and interactive elements */
+  nav,
+  .no-print,
+  button[aria-label="Export briefing"],
+  [data-print-hide] {
+    display: none !important;
+  }
+
+  /* Reset page */
+  body {
+    background: white !important;
+    color: #2D2D2D !important;
+    font-size: 11px !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Page header */
+  .print-header {
+    display: block !important;
+    text-align: center;
+    border-bottom: 2px solid #005030;
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+  }
+
+  .print-header h1 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #005030;
+    margin: 0;
+  }
+
+  .print-header .print-date {
+    font-size: 10px;
+    color: #6b6b6b;
+    margin-top: 2px;
+  }
+
+  .print-header .print-brand {
+    font-size: 9px;
+    color: #6b6b6b;
+    margin-top: 4px;
+  }
+
+  /* Layout metric cards in print-friendly grid */
+  .print-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 8px !important;
+  }
+
+  /* Card styling for print */
+  .rounded-fs-md {
+    border: 1px solid #E0E0E0 !important;
+    box-shadow: none !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* Remove shadow and hover effects */
+  .shadow-fs,
+  .shadow-fs-md {
+    box-shadow: none !important;
+  }
+
+  /* Simplify colours for print */
+  .bg-fs-primary {
+    background-color: #005030 !important;
+    color: white !important;
+  }
+
+  /* Ensure text is readable */
+  .text-fs-text-muted {
+    color: #6b6b6b !important;
+  }
+
+  /* Page margins */
+  @page {
+    margin: 15mm;
+    size: A4 portrait;
+  }
+
+  /* Footer on every page */
+  .print-footer {
+    display: block !important;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 8px;
+    color: #9ca3af;
+    border-top: 1px solid #E0E0E0;
+    padding-top: 4px;
+  }
+}
+
+/* Hide print-only elements on screen */
+@media screen {
+  .print-header,
+  .print-footer {
+    display: none !important;
+  }
+}

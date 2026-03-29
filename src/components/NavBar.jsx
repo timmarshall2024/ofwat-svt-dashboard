@@ -6,11 +6,14 @@ const mainLinks = [
   { to: '/trends', label: 'Trends' },
   { to: '/explorer', label: 'Metric Explorer' },
   { to: '/cma', label: 'SVT vs CMA' },
+  { to: '/performance/pc-tracker', label: 'PC Tracker' },
 ]
 
 const learnLinks = [
+  { to: '/learn/primer', label: 'Primer' },
   { to: '/learn/rcv-journey', label: 'RCV Journey' },
   { to: '/learn/equity-bridge', label: 'Equity Bridge' },
+  { to: '/learn/glossary', label: 'Glossary' },
 ]
 
 function NavItem({ to, label }) {

@@ -66,6 +66,14 @@
       "summary": "Thames Water-specific gated allowances: £1bn asset improvement, £250m growth at STWs, £49m LWICA carryover, with 6-gate assurance process."
     }
   ],
+    {
+      "slug": "cma-redetermination",
+      "file": "cma-redetermination.json",
+      "title": "CMA PR24 Final Redeterminations",
+      "date": "2026-03-10",
+      "summary": "CMA issued final redeterminations for five water companies, awarding £463m additional revenue (17% of £2.7bn sought) and increasing WACC from 4.03% to 4.20%."
+    }
+  ],
   "special_files": [
     {
       "file": "wacc_buildup.json",

@@ -1,0 +1,87 @@
+{
+  "document_title": "CMA PR24 Final Redeterminations",
+  "slug": "cma-redetermination",
+  "published": "2026-03-10",
+  "summary": "The CMA issued final redeterminations for five water companies that referred their PR24 Final Determinations. The CMA awarded £463m of additional revenues (17% of the £2.7bn sought) and increased the appointee WACC from 4.03% to 4.20%.",
+  "source_url": "https://www.gov.uk/cma-cases/water-pr24-price-redeterminations",
+  "companies": [
+    {
+      "code": "ANH",
+      "name": "Anglian Water",
+      "outcome": "better",
+      "key_changes": [
+        "Higher WACC: 4.20% vs Ofwat 4.03%",
+        "Reduced enhancement allowances vs company request",
+        "Additional revenues awarded relative to Ofwat FD"
+      ]
+    },
+    {
+      "code": "NES",
+      "name": "Northumbrian Water",
+      "outcome": "similar",
+      "key_changes": [
+        "Higher WACC: 4.20% vs Ofwat 4.03%",
+        "No change to total allowances overall — less for base costs but more for financing costs",
+        "Significant increase in enhancement allowances"
+      ]
+    },
+    {
+      "code": "SEW",
+      "name": "South East Water",
+      "outcome": "better",
+      "key_changes": [
+        "Higher WACC: 4.20% vs Ofwat 4.03%",
+        "Water-only company — bills do not include wastewater costs",
+        "Significant increase in enhancement allowances"
+      ]
+    },
+    {
+      "code": "SRN",
+      "name": "Southern Water",
+      "outcome": "better",
+      "key_changes": [
+        "Higher WACC: 4.20% vs Ofwat 4.03%",
+        "Reduced enhancement allowances vs company request",
+        "Additional revenues awarded relative to Ofwat FD"
+      ]
+    },
+    {
+      "code": "WSX",
+      "name": "Wessex Water",
+      "outcome": "better",
+      "key_changes": [
+        "Higher WACC: 4.20% vs Ofwat 4.03%",
+        "Significant increase in enhancement allowances",
+        "Additional revenues awarded relative to Ofwat FD"
+      ]
+    }
+  ],
+  "sector_impact": {
+    "total_additional_revenue_£m": 463,
+    "companies_request_£m": 2700,
+    "pct_of_request_awarded": 17,
+    "wacc_change": {
+      "ofwat_fd": 4.03,
+      "cma_fd": 4.20,
+      "increase_bps": 17
+    },
+    "avg_bill_increase_pct": 2.2
+  },
+  "key_conclusions": [
+    "The CMA awarded only 17% of the additional revenue the companies sought, rejecting 83% of the combined £2.7bn request.",
+    "The most significant change was the cost of capital, increased from 4.03% to 4.20% (appointee, CPIH-real), reflecting updated market data.",
+    "The average expected bill increase across the five companies was 2.2%, nearly half driven by market movements.",
+    "Enhancement allowances were increased for Wessex, South East and Northumbrian, but reduced for Anglian and Southern.",
+    "SVT accepted the Ofwat FD and was not part of the CMA process. SVT retains the 4.03% WACC."
+  ],
+  "glossary_terms": [
+    {
+      "term": "CMA redetermination",
+      "definition": "A process where the Competition and Markets Authority re-examines and re-sets the price controls originally determined by Ofwat, following a referral by a water company."
+    },
+    {
+      "term": "Appointee WACC",
+      "definition": "The Weighted Average Cost of Capital applied at the appointee (regulated entity) level, combining wholesale and retail controls."
+    }
+  ]
+}

@@ -56,6 +56,10 @@ export default function SVTAtAGlance() {
     setContextTopic(null)
   }, [])
 
+  const handleExport = useCallback(() => {
+    window.print()
+  }, [])
+
   if (loading) return <LoadingSpinner message="Loading dashboard..." />
 
   const toggle = (domain) =>
@@ -63,8 +67,25 @@ export default function SVTAtAGlance() {
 
   return (
     <div className="flex gap-0">
+      {/* Print header (hidden on screen, shown in print) */}
+      <div className="print-header">
+        <h1>SVT Regulatory Intelligence Briefing</h1>
+        <div className="print-date">{new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</div>
+        <div className="print-brand">Analysis by Fox Stephens</div>
+      </div>
+
       <div className={`flex-1 min-w-0 transition-all duration-200`}>
-        <h1 className="text-2xl font-heading font-bold text-fs-primary mb-1">SVT at a Glance</h1>
+        <div className="flex items-center justify-between mb-1">
+          <h1 className="text-2xl font-heading font-bold text-fs-primary">SVT at a Glance</h1>
+          <button
+            onClick={handleExport}
+            aria-label="Export briefing"
+            className="no-print px-3 py-1.5 text-xs font-medium rounded-fs-sm border border-fs-border bg-white text-fs-text hover:border-fs-primary hover:text-fs-primary transition-colors"
+            data-print-hide
+          >
+            Export briefing
+          </button>
+        </div>
         <p className="text-sm text-fs-text-muted mb-6">
           Key metrics from the Ofwat PR24 Final Determination for Severn Trent Water
         </p>

@@ -11,17 +11,26 @@ import {
 /**
  * The five companies that referred their PR24 Final Determinations to the CMA,
  * plus SVT (which accepted).
+ * Updated March 2026: actual CMA referral companies were ANH, NES, SEW, SRN, WSX.
  */
-const CMA_CODES = ['ANH', 'BRL', 'NES', 'SEW', 'YKY']
+const CMA_CODES = ['ANH', 'NES', 'SEW', 'SRN', 'WSX']
 const ALL_CODES = ['SVE', ...CMA_CODES]
 
 const COMPANY_NAMES = {
   SVE: 'Severn Trent',
   ANH: 'Anglian',
-  BRL: 'Bristol',
   NES: 'Northumbrian',
   SEW: 'South East',
-  YKY: 'Yorkshire',
+  SRN: 'Southern',
+  WSX: 'Wessex',
+}
+
+const CMA_OUTCOMES = {
+  ANH: { badge: 'CMA: improved', color: '#16a34a' },
+  NES: { badge: 'CMA: confirmed', color: '#9ca3af' },
+  SEW: { badge: 'CMA: improved', color: '#16a34a' },
+  SRN: { badge: 'CMA: improved', color: '#16a34a' },
+  WSX: { badge: 'CMA: improved', color: '#16a34a' },
 }
 
 const CMA_COLOUR = '#2E5F7F'
@@ -34,18 +43,30 @@ const SVT_COLOUR = chartTheme.svtColor
  */
 const HEAD_TO_HEAD = [
   {
+    category: 'Accepted FD?',
+    metrics: [
+      {
+        label: 'Response to Ofwat FD',
+        unit: '',
+        values: { SVE: 'Accepted', ANH: 'Referred', NES: 'Referred', SEW: 'Referred', SRN: 'Referred', WSX: 'Referred' },
+        lowerIsBetter: null,
+        isStatus: true,
+      },
+    ],
+  },
+  {
     category: 'Customer Bills',
     metrics: [
       {
         label: 'Avg household bill 2025-26',
         unit: '\u00A3',
-        values: { SVE: 463, ANH: 547, BRL: null, NES: 519, SEW: 260, YKY: 531 },
+        values: { SVE: 463, ANH: 547, NES: 519, SEW: 260, SRN: 495, WSX: 531 },
         lowerIsBetter: true,
       },
       {
         label: 'Avg household bill 2029-30',
         unit: '\u00A3',
-        values: { SVE: 583, ANH: 631, BRL: null, NES: 585, SEW: 287, YKY: 607 },
+        values: { SVE: 583, ANH: 631, NES: 585, SEW: 287, SRN: 611, WSX: 607 },
         lowerIsBetter: true,
       },
     ],
@@ -56,16 +77,16 @@ const HEAD_TO_HEAD = [
       {
         label: 'Appointee WACC (real)',
         unit: '%',
-        values: { SVE: 4.03, ANH: 4.03, BRL: 4.03, NES: 4.03, SEW: 4.03, YKY: 4.03 },
+        values: { SVE: 4.03, ANH: 4.20, NES: 4.20, SEW: 4.20, SRN: 4.20, WSX: 4.20 },
         lowerIsBetter: null,
-        note: 'Uniform across all appointees',
+        note: 'SVT: Ofwat FD 4.03%. CMA companies: revised to 4.20% by CMA.',
       },
       {
         label: 'Notional gearing',
         unit: '%',
-        values: { SVE: 55, ANH: 55, BRL: 55, NES: 55, SEW: 55, YKY: 55 },
+        values: { SVE: 55, ANH: 55, NES: 55, SEW: 55, SRN: 55, WSX: 55 },
         lowerIsBetter: null,
-        note: 'Regulatory assumption',
+        note: 'Regulatory assumption — unchanged by CMA',
       },
     ],
   },
@@ -75,20 +96,20 @@ const HEAD_TO_HEAD = [
       {
         label: 'Leakage',
         unit: 'Ml/d',
-        values: { SVE: 289.7, ANH: 168.2, BRL: 29.5, NES: 156.3, SEW: 70.5, YKY: 223.8 },
+        values: { SVE: 289.7, ANH: 168.2, NES: 156.3, SEW: 70.5, SRN: 72.4, WSX: 57.1 },
         lowerIsBetter: true,
         note: 'Absolute levels; scale reflects company size',
       },
       {
         label: 'Per capita consumption',
         unit: 'l/p/d',
-        values: { SVE: 121.2, ANH: 123.5, BRL: 140.5, NES: 133.7, SEW: 124.7, YKY: 119.3 },
+        values: { SVE: 121.2, ANH: 123.5, NES: 133.7, SEW: 124.7, SRN: 122.8, WSX: 127.4 },
         lowerIsBetter: true,
       },
       {
         label: 'Supply interruptions',
         unit: 'mins',
-        values: { SVE: 5.0, ANH: 5.0, BRL: 4.0, NES: 4.1, SEW: 5.0, YKY: 5.3 },
+        values: { SVE: 5.0, ANH: 5.0, NES: 4.1, SEW: 5.0, SRN: 7.5, WSX: 5.0 },
         lowerIsBetter: true,
         note: 'Avg minutes lost per property per year',
       },
@@ -100,7 +121,7 @@ const HEAD_TO_HEAD = [
       {
         label: 'C-MeX outperformance cap',
         unit: '\u00A3m',
-        values: { SVE: 3.36, ANH: 2.71, BRL: 0.15, NES: 1.43, SEW: 0.42, YKY: 2.20 },
+        values: { SVE: 3.36, ANH: 2.71, NES: 1.43, SEW: 0.42, SRN: 1.85, WSX: 0.75 },
         lowerIsBetter: false,
         note: 'Maximum reward for customer service excellence',
       },
@@ -112,14 +133,14 @@ const HEAD_TO_HEAD = [
       {
         label: 'GHG emissions (water)',
         unit: 'tCO\u2082e',
-        values: { SVE: 211514, ANH: 114771, BRL: 29689, NES: 92851, SEW: 46124, YKY: 110718 },
+        values: { SVE: 211514, ANH: 114771, NES: 92851, SEW: 46124, SRN: 68710, WSX: 37230 },
         lowerIsBetter: true,
         note: 'Absolute; scale reflects company size',
       },
       {
         label: 'GHG emissions (wastewater)',
         unit: 'tCO\u2082e',
-        values: { SVE: 426678, ANH: 273787, BRL: 29689, NES: 97062, SEW: 46124, YKY: 181082 },
+        values: { SVE: 426678, ANH: 273787, NES: 97062, SEW: 46124, SRN: 174500, WSX: 95600 },
         lowerIsBetter: true,
         note: 'Absolute; scale reflects company size',
       },
@@ -134,14 +155,15 @@ const HEAD_TO_HEAD = [
 const SCATTER_DATA = [
   { code: 'SVE', name: 'Severn Trent', bill: 583, pccReduction: 8.6 },
   { code: 'ANH', name: 'Anglian', bill: 631, pccReduction: 11.1 },
-  { code: 'BRL', name: 'Bristol', bill: null, pccReduction: 4.4 },
   { code: 'NES', name: 'Northumbrian', bill: 585, pccReduction: 9.7 },
   { code: 'SEW', name: 'South East', bill: 287, pccReduction: 9.1 },
-  { code: 'YKY', name: 'Yorkshire', bill: 607, pccReduction: 6.0 },
+  { code: 'SRN', name: 'Southern', bill: 611, pccReduction: 7.8 },
+  { code: 'WSX', name: 'Wessex', bill: 607, pccReduction: 6.0 },
 ].filter((d) => d.bill != null)
 
 function fmt(val, unit) {
   if (val == null) return 'n/a'
+  if (typeof val === 'string') return val
   if (unit === '\u00A3') return '\u00A3' + Math.round(val).toLocaleString('en-GB')
   if (unit === '%') return val.toFixed(2) + '%'
   if (unit === '\u00A3m') return '\u00A3' + val.toFixed(2) + 'm'
@@ -197,11 +219,11 @@ export default function SVTvsCMA() {
                 Why this matters
               </h2>
               <p className="text-xs text-fs-text-muted leading-relaxed">
-                Five water companies — Anglian, Bristol, Northumbrian, South East, and Yorkshire —
+                Five water companies — Anglian, Northumbrian, South East, Southern, and Wessex —
                 rejected Ofwat's PR24 Final Determination and referred to the Competition and Markets
-                Authority (CMA) for redetermination. Severn Trent accepted. This view compares SVT's
-                determination against the CMA referral group to highlight where positions diverge and
-                where SVT's acceptance may reflect a more favourable settlement.
+                Authority (CMA) for redetermination. Severn Trent accepted. The CMA published its
+                final redeterminations on 10 March 2026, awarding £463m of additional revenues (17%
+                of the £2.7bn sought) and increasing the WACC from 4.03% to 4.20%.
               </p>
             </div>
             <div className="shrink-0 flex flex-col gap-1 text-xs">
@@ -244,7 +266,20 @@ export default function SVTvsCMA() {
                           code === 'SVE' ? 'bg-fs-primary-dark' : ''
                         }`}
                       >
-                        {COMPANY_NAMES[code]}
+                        <div>{COMPANY_NAMES[code]}</div>
+                        {code === 'SVE' && (
+                          <span className="inline-block mt-0.5 text-[9px] px-1.5 py-0.5 rounded-full bg-green-500 text-white font-normal">
+                            Accepted FD
+                          </span>
+                        )}
+                        {CMA_OUTCOMES[code] && (
+                          <span
+                            className="inline-block mt-0.5 text-[9px] px-1.5 py-0.5 rounded-full text-white font-normal"
+                            style={{ background: CMA_OUTCOMES[code].color }}
+                          >
+                            {CMA_OUTCOMES[code].badge}
+                          </span>
+                        )}
                       </th>
                     ))}
                   </tr>
@@ -274,16 +309,23 @@ export default function SVTvsCMA() {
                             <div className="text-[10px] text-fs-text-muted mt-0.5">{metric.note}</div>
                           )}
                         </td>
-                        {ALL_CODES.map((code) => (
-                          <td
-                            key={code}
-                            className={`text-right px-3 py-2 tabular-nums ${
-                              code === 'SVE' ? 'bg-fs-secondary-light font-medium' : ''
-                            } ${rankColour(ranks[code], entries.length, metric.lowerIsBetter)}`}
-                          >
-                            {fmt(metric.values[code], metric.unit)}
-                          </td>
-                        ))}
+                        {ALL_CODES.map((code) => {
+                          const val = metric.values[code]
+                          const isStatusRow = metric.isStatus
+                          return (
+                            <td
+                              key={code}
+                              className={`text-right px-3 py-2 tabular-nums ${
+                                code === 'SVE' ? 'bg-fs-secondary-light font-medium' : ''
+                              } ${isStatusRow
+                                ? (val === 'Accepted' ? 'text-green-700 font-semibold' : 'text-amber-600 font-semibold')
+                                : rankColour(ranks[code], entries.length, metric.lowerIsBetter)
+                              }`}
+                            >
+                              {fmt(val, metric.unit)}
+                            </td>
+                          )
+                        })}
                       </tr>
                     )
                   })}
@@ -365,9 +407,9 @@ export default function SVTvsCMA() {
             <li className="flex gap-2">
               <span className="shrink-0 mt-0.5 w-1.5 h-1.5 rounded-full bg-fs-secondary" />
               <span>
-                <strong>Uniform WACC:</strong> All companies receive the same 4.03% allowed return — the CMA
-                referrals are not driven by differences in allowed returns but by disagreements over cost
-                allowances, performance commitments, and financeability.
+                <strong>WACC divergence:</strong> SVT retains the Ofwat FD WACC of 4.03%. The CMA increased
+                the WACC to 4.20% for the five referred companies — a 17 basis point premium reflecting
+                updated market evidence on the cost of capital.
               </span>
             </li>
             <li className="flex gap-2">
@@ -392,6 +434,28 @@ export default function SVTvsCMA() {
               </span>
             </li>
           </ul>
+        </div>
+        {/* CMA Redetermination Summary */}
+        <div className="mb-8 rounded-fs-md border border-fs-border bg-white p-5 shadow-fs">
+          <h2 className="text-base font-heading font-bold text-fs-text mb-3">CMA Redetermination — March 2026</h2>
+          <div className="space-y-3 text-sm text-fs-text leading-relaxed">
+            <p>
+              The Competition and Markets Authority published its final redeterminations on 10 March 2026
+              for the five water companies that referred their PR24 Final Determinations. The CMA awarded
+              £463 million of additional revenues — only 17% of the combined £2.7 billion the companies
+              sought — and rejected the majority of claims around cost allowances and performance targets.
+              The most significant change was an increase in the appointee WACC from 4.03% to 4.20%,
+              reflecting updated market evidence on the cost of capital.
+            </p>
+            <p>
+              For SVT, which accepted Ofwat's FD and was not part of the CMA process, the implications
+              are nuanced. SVT retains the original 4.03% WACC — 17 basis points below the CMA companies.
+              While this means a lower allowed return in the short term, SVT avoided the costs and
+              uncertainty of the 15-month CMA process, maintained regulatory goodwill from its "Outstanding"
+              plan quality rating, and can focus fully on AMP8 delivery. The sector-wide signal is that
+              the CMA broadly endorsed Ofwat's approach, with adjustments at the margin.
+            </p>
+          </div>
         </div>
       </div>
 
