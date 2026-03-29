@@ -1,0 +1,43 @@
+{
+  "colors": {
+    "primary":        "#005030",
+    "secondary":      "#F47321",
+    "background":     "#FFFFFF",
+    "surface":        "#FFFFFF",
+    "text_primary":   "#2D2D2D",
+    "text_secondary": "#6b6b6b",
+    "border":         "#E0E0E0",
+    "success":        "#005030",
+    "warning":        "#d97706",
+    "highlight":      "#F47321"
+  },
+  "typography": {
+    "font_family_heading": "'Times New Roman', Times, serif",
+    "font_family_body":    "'Times New Roman', Times, serif",
+    "font_size_base":      "14px",
+    "font_weight_heading": "700",
+    "font_weight_body":    "400",
+    "letter_spacing":      "0.5px"
+  },
+  "spacing": {
+    "border_radius_sm": "4px",
+    "border_radius_md": "6px",
+    "border_radius_lg": "6px"
+  },
+  "logo": {
+    "path": "/fox-stephens-logo.png",
+    "icon_path": "/fox-stephens-icon.svg",
+    "format": "png / svg"
+  },
+  "_sources": {
+    "css": "Applications/shareholders/app/static/css/styles.css",
+    "icon_svg": "Applications/shareholders/app/static/images/fox-stephens-icon.svg",
+    "logo_png": "Applications/shareholders/app/static/images/fox-stephens-logo.png"
+  },
+  "_notes": {
+    "primary": "Sebastian Green #005030 — sidebar bg, success colour, primary brand",
+    "secondary": "Ibis Orange #F47321 — accent, active states, highlights, CTA",
+    "font": "Times New Roman used globally across the Shareholder Analysis app",
+    "chart_palette": "Microsoft Office Colorful Palette 1: #2E5F7F, #DA7842, #34692E, #489CD0, #93358F, #65A542, #1B394C, #8E451F, #1E3F1B"
+  }
+}

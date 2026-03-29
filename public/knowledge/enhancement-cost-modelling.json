@@ -1,0 +1,72 @@
+{
+  "document_title": "PR24 final determinations: Expenditure allowances — Enhancement cost modelling appendix",
+  "slug": "enhancement-cost-modelling",
+  "publication_date": "2024-12-19",
+  "source_pdf": "PR24-final-determinations-Expenditure-allowances-Enhancement-cost-modelling-appendix.pdf",
+  "key_decisions": [
+    {
+      "decision": "Scheme-level econometric modelling",
+      "detail": "OLS regression on scheme-level data for most enhancement areas, with random effects for metering and lead pipe replacement. Cook's distance outlier treatment with 4/N threshold",
+      "impact_£m": null
+    },
+    {
+      "decision": "Storm overflow allowances",
+      "detail": "Companies requested £12bn; Ofwat applied scheme-level econometric models to determine efficient costs",
+      "impact_£m": 12000
+    },
+    {
+      "decision": "Phosphorus removal allowances",
+      "detail": "Companies requested £5.8bn; scheme-level models applied",
+      "impact_£m": 5800
+    },
+    {
+      "decision": "Growth at STWs allowances",
+      "detail": "Companies requested £2.4bn for growth at sewage treatment works",
+      "impact_£m": 2400
+    },
+    {
+      "decision": "IED compliance allowances",
+      "detail": "Companies requested £1.5bn for Industrial Emissions Directive compliance",
+      "impact_£m": 1500
+    },
+    {
+      "decision": "Sanitary parameters allowances",
+      "detail": "Companies requested £1.8bn for sanitary parameters improvements",
+      "impact_£m": 1800
+    },
+    {
+      "decision": "Supply interconnectors allowances",
+      "detail": "Companies requested over £1bn for supply interconnectors",
+      "impact_£m": 1000
+    },
+    {
+      "decision": "Metering allowances",
+      "detail": "Companies requested £1.7bn; random effects estimation used",
+      "impact_£m": 1700
+    },
+    {
+      "decision": "Lead pipe replacement allowances",
+      "detail": "Companies requested £270m; random effects estimation used",
+      "impact_£m": 270
+    }
+  ],
+  "key_numbers": [
+    { "label": "Storm overflows requested", "value": 12000, "unit": "£m", "context": "Total company requests" },
+    { "label": "Phosphorus removal requested", "value": 5800, "unit": "£m", "context": "Total company requests" },
+    { "label": "Growth at STWs requested", "value": 2400, "unit": "£m", "context": "Total company requests" },
+    { "label": "IED compliance requested", "value": 1500, "unit": "£m", "context": "Total company requests" },
+    { "label": "Sanitary parameters requested", "value": 1800, "unit": "£m", "context": "Total company requests" },
+    { "label": "Supply interconnectors requested", "value": 1000, "unit": "£m", "context": "Total company requests (minimum)" },
+    { "label": "Metering requested", "value": 1700, "unit": "£m", "context": "Total company requests" },
+    { "label": "Lead pipe replacement requested", "value": 270, "unit": "£m", "context": "Total company requests" },
+    { "label": "Outlier threshold", "value": "4/N", "unit": "Cook's distance ratio", "context": "Where N is number of observations" }
+  ],
+  "glossary_terms": [
+    { "term": "OLS", "definition": "Ordinary Least Squares — regression estimation method used for scheme-level enhancement cost models" },
+    { "term": "Cook's distance", "definition": "Statistical measure of influence of individual observations; 4/N threshold used for outlier identification" },
+    { "term": "IED", "definition": "Industrial Emissions Directive — EU-derived environmental regulation for certain treatment works" },
+    { "term": "STW", "definition": "Sewage Treatment Works" },
+    { "term": "Scheme-level modelling", "definition": "Econometric approach using individual project data rather than aggregated company-level data" },
+    { "term": "PE", "definition": "Population Equivalent — measure of sewage treatment capacity" }
+  ]
+}

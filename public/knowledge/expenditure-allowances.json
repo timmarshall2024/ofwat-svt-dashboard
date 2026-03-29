@@ -1,0 +1,65 @@
+{
+  "document_title": "PR24 final determinations: Expenditure allowances",
+  "slug": "expenditure-allowances",
+  "publication_date": "2024-12-19",
+  "source_pdf": "9.-PR24-final-determinations-Expenditure-allowances.pdf",
+  "key_decisions": [
+    {
+      "decision": "Total sector expenditure allowances",
+      "detail": "Up to £104bn for 2025-30 against company requests of £112bn, a 7% overall cost challenge",
+      "impact_£m": 104000
+    },
+    {
+      "decision": "SVT total expenditure (post frontier shift)",
+      "detail": "£14,917m vs company request of £15,689m (£772m / 5% reduction)",
+      "impact_£m": 14917
+    },
+    {
+      "decision": "SVT base expenditure",
+      "detail": "£8,554m vs company request of £8,779m",
+      "impact_£m": 8554
+    },
+    {
+      "decision": "SVT enhancement expenditure",
+      "detail": "£6,679m vs company request of £7,207m",
+      "impact_£m": 6679
+    },
+    {
+      "decision": "Frontier shift efficiency challenge",
+      "detail": "0.5% per annum applied to all expenditure allowances",
+      "impact_£m": null
+    },
+    {
+      "decision": "Base cost modelling approach",
+      "detail": "Econometric models to benchmark efficient base costs across companies with company-specific adjustments for unmodelled costs",
+      "impact_£m": null
+    },
+    {
+      "decision": "Enhancement cost assessment approach",
+      "detail": "Combined econometric modelling, deep dives for large schemes, and unit cost benchmarking",
+      "impact_£m": null
+    }
+  ],
+  "key_numbers": [
+    { "label": "Sector total allowance (post frontier shift)", "value": 103700, "unit": "£m (2022-23 prices)", "context": "Ofwat total industry expenditure allowance" },
+    { "label": "Sector total company requests", "value": 112000, "unit": "£m (2022-23 prices)", "context": "Total company requests across the sector" },
+    { "label": "Overall cost challenge", "value": 7, "unit": "%", "context": "Reduction from company requests to Ofwat allowances" },
+    { "label": "SVT base expenditure (Ofwat)", "value": 8554, "unit": "£m (2022-23 prices)", "context": "Ofwat allowance 2025-30" },
+    { "label": "SVT base expenditure (Company)", "value": 8779, "unit": "£m (2022-23 prices)", "context": "SVT company request 2025-30" },
+    { "label": "SVT enhancement expenditure (Ofwat)", "value": 6679, "unit": "£m (2022-23 prices)", "context": "Ofwat allowance 2025-30" },
+    { "label": "SVT enhancement expenditure (Company)", "value": 7207, "unit": "£m (2022-23 prices)", "context": "SVT company request 2025-30" },
+    { "label": "SVT total pre-frontier shift (Ofwat)", "value": 15233, "unit": "£m (2022-23 prices)", "context": "Before frontier shift applied" },
+    { "label": "SVT total post-frontier shift (Ofwat)", "value": 14917, "unit": "£m (2022-23 prices)", "context": "After frontier shift applied" },
+    { "label": "Frontier shift rate", "value": 0.5, "unit": "% p.a.", "context": "Annual efficiency improvement applied" }
+  ],
+  "glossary_terms": [
+    { "term": "Totex", "definition": "Total expenditure — the sum of capital expenditure (capex) and operating expenditure (opex)" },
+    { "term": "Base expenditure", "definition": "Expenditure to maintain current service levels and meet ongoing regulatory requirements; benchmarked using econometric models" },
+    { "term": "Enhancement expenditure", "definition": "Expenditure to deliver new or improved service levels above baseline, including environmental improvements" },
+    { "term": "Frontier shift", "definition": "Annual efficiency improvement applied to expenditure allowances, set at 0.5% p.a. for AMP8" },
+    { "term": "Real price effects", "definition": "Adjustments for input price inflation differing from CPIH" },
+    { "term": "Cost sharing", "definition": "Mechanism that shares cost outperformance or underperformance between companies and customers" },
+    { "term": "UQ", "definition": "Upper quartile — benchmark level used for base cost efficiency assessment" },
+    { "term": "Catch-up efficiency", "definition": "Adjustment applied to bring less efficient companies towards the efficiency frontier" }
+  ]
+}

@@ -1,0 +1,96 @@
+{
+  "document_title": "Overview of Severn Trent Water's PR24 final determination",
+  "slug": "svt-overview",
+  "publication_date": "2025-04-17",
+  "source_pdf": "Overview-of-Severn-Trent-Waters-PR24-final-determination.pdf",
+  "key_decisions": [
+    {
+      "decision": "Business plan quality assessment",
+      "detail": "SVT rated Outstanding — one of only three companies to receive the highest rating",
+      "impact_£m": null
+    },
+    {
+      "decision": "Total expenditure allowance",
+      "detail": "£15bn total expenditure for AMP8 (2025-30), £773m (5%) less than company response",
+      "impact_£m": 15000
+    },
+    {
+      "decision": "QAA reward",
+      "detail": "Qualitative assessment award of £93m for Outstanding business plan quality",
+      "impact_£m": 93
+    },
+    {
+      "decision": "Storm overflow investment",
+      "detail": "£1.7bn enhancement allowance for storm overflow improvements",
+      "impact_£m": 1700
+    },
+    {
+      "decision": "Nutrient pollution investment",
+      "detail": "£605m enhancement allowance for phosphorus removal and nutrient reduction",
+      "impact_£m": 605
+    },
+    {
+      "decision": "Water supply enhancement",
+      "detail": "£576m for water supply resilience and demand management",
+      "impact_£m": 576
+    },
+    {
+      "decision": "Drinking water quality",
+      "detail": "£485m enhancement allowance for drinking water quality improvements",
+      "impact_£m": 485
+    },
+    {
+      "decision": "Resilience investment",
+      "detail": "£341m for infrastructure resilience",
+      "impact_£m": 341
+    },
+    {
+      "decision": "Smart metering",
+      "detail": "£281m enhancement allowance for metering programme",
+      "impact_£m": 281
+    }
+  ],
+  "key_numbers": [
+    { "label": "Average household bill 2024-25", "value": 398, "unit": "£", "context": "Starting bill level" },
+    { "label": "Average household bill 2029-30", "value": 583, "unit": "£", "context": "End of AMP8 bill level" },
+    { "label": "Allowed return on capital (WACC)", "value": 4.03, "unit": "%", "context": "Appointee WACC, wholesale 3.97%" },
+    { "label": "Total expenditure allowance", "value": 15000, "unit": "£m", "context": "AMP8 2025-30" },
+    { "label": "Reduction from company request", "value": 773, "unit": "£m", "context": "5% below SVT company response" },
+    { "label": "Storm overflow target reduction", "value": 26, "unit": "%", "context": "Reduction in storm overflow spills" },
+    { "label": "Phosphorus target reduction", "value": 45, "unit": "%", "context": "Reduction in phosphorus discharges" },
+    { "label": "Pollution incidents target reduction", "value": 30, "unit": "%", "context": "Reduction in pollution incidents" },
+    { "label": "Leakage target reduction", "value": 16, "unit": "%", "context": "Reduction in leakage" },
+    { "label": "Internal sewer flooding target reduction", "value": 24, "unit": "%", "context": "Reduction in internal sewer flooding incidents" }
+  ],
+  "glossary_terms": [
+    { "term": "AMP8", "definition": "Asset Management Period 8, covering 2025-2030, the period of Ofwat's PR24 price review" },
+    { "term": "QAA", "definition": "Qualitative Assessment Award — financial reward or penalty based on Ofwat's assessment of business plan quality" },
+    { "term": "ODI", "definition": "Outcome Delivery Incentive — financial incentive mechanism linked to performance commitments" },
+    { "term": "PC", "definition": "Performance Commitment — a specific target or obligation set by Ofwat for each company" },
+    { "term": "WaSC", "definition": "Water and Sewerage Company — provides both water and wastewater services (e.g. SVT)" },
+    { "term": "Enhancement expenditure", "definition": "Capital spending on new or improved assets beyond maintaining existing service levels" }
+  ],
+  "svt_assessment": {
+    "overall_rating": "Outstanding",
+    "quality_reward_£m": 93,
+    "strengths": [
+      "Well-evidenced and ambitious business plan",
+      "Strong track record of delivery",
+      "Innovative approaches to environmental improvement",
+      "Good customer engagement and support for vulnerable customers"
+    ]
+  },
+  "svt_key_variances": [
+    { "area": "Total expenditure", "company_request_£m": 15773, "fd_allowance_£m": 15000, "variance_£m": -773, "variance_pct": -5 },
+    { "area": "Storm overflows enhancement", "company_request_£m": null, "fd_allowance_£m": 1700, "variance_£m": null, "variance_pct": null },
+    { "area": "Nutrient pollution enhancement", "company_request_£m": null, "fd_allowance_£m": 605, "variance_£m": null, "variance_pct": null }
+  ],
+  "svt_notable_pcs": [
+    { "commitment": "Storm overflow spills", "target": "26% reduction by 2030", "direction": "lower_is_better" },
+    { "commitment": "Phosphorus discharges", "target": "45% reduction by 2030", "direction": "lower_is_better" },
+    { "commitment": "Pollution incidents", "target": "30% reduction by 2030", "direction": "lower_is_better" },
+    { "commitment": "Leakage", "target": "16% reduction by 2030", "direction": "lower_is_better" },
+    { "commitment": "Internal sewer flooding", "target": "24% reduction by 2030", "direction": "lower_is_better" },
+    { "commitment": "ODI range", "target": "-0.63% to +1.31% of RoRE", "direction": "n/a" }
+  ]
+}

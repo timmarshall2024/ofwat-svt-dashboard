@@ -1,0 +1,49 @@
+name: Deploy to Cloudflare Pages
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: dashboard/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: dashboard
+
+      - name: Build
+        run: npm run build
+        working-directory: dashboard
+
+      - name: Download data from Cloudflare R2
+        run: |
+          aws s3 cp s3://${{ secrets.R2_BUCKET_NAME }}/data/ \
+            dashboard/dist/data/ \
+            --recursive \
+            --endpoint-url ${{ secrets.R2_ENDPOINT_URL }}
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: ofwat-svt-dashboard
+          directory: dashboard/dist
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}

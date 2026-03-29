@@ -1,0 +1,43 @@
+{
+  "document_title": "PR24 final determinations: Expenditure allowances — Thames Water gated allowance appendix",
+  "slug": "thames-gated-allowance",
+  "publication_date": "2024-12-19",
+  "source_pdf": "PR24-final-determinations-Expenditure-allowances-Thames-Water-gated-allowance-appendix.pdf",
+  "key_decisions": [
+    {
+      "decision": "Thames Water asset improvement gated allowance",
+      "detail": "Up to £500m water + £500m wastewater = £1,000m total. Thames originally requested £677m (WAAP), revised to £1,044m",
+      "impact_£m": 1000
+    },
+    {
+      "decision": "Thames Water growth at STWs gated allowance",
+      "detail": "Up to £250m gated allowance for growth at sewage treatment works",
+      "impact_£m": 250
+    },
+    {
+      "decision": "LWICA carryover allowance",
+      "detail": "£49.2m (2022-23 prices): £20.4m trunk mains + £28.8m distribution mains",
+      "impact_£m": 49.2
+    },
+    {
+      "decision": "Six-gate assurance process",
+      "detail": "Gate 0 through Gate 5 with independent third-party assurance at each stage before expenditure released",
+      "impact_£m": null
+    }
+  ],
+  "key_numbers": [
+    { "label": "Asset improvement water gated allowance", "value": 500, "unit": "£m", "context": "Maximum for Thames Water" },
+    { "label": "Asset improvement wastewater gated allowance", "value": 500, "unit": "£m", "context": "Maximum for Thames Water" },
+    { "label": "Total asset improvement gated allowance", "value": 1000, "unit": "£m", "context": "Water + wastewater" },
+    { "label": "Growth at STWs gated allowance", "value": 250, "unit": "£m", "context": "Maximum for Thames Water" },
+    { "label": "LWICA carryover total", "value": 49.2, "unit": "£m (2022-23 prices)", "context": "Trunk + distribution mains" },
+    { "label": "LWICA trunk mains", "value": 20.4, "unit": "£m (2022-23 prices)", "context": "Carryover from PR19" },
+    { "label": "LWICA distribution mains", "value": 28.8, "unit": "£m (2022-23 prices)", "context": "Carryover from PR19" },
+    { "label": "Number of assurance gates", "value": 6, "unit": "gates", "context": "Gate 0 through Gate 5" }
+  ],
+  "glossary_terms": [
+    { "term": "WAAP", "definition": "Water Asset Assurance Programme — Thames Water's programme for water asset health improvements" },
+    { "term": "LWICA", "definition": "London Water Infrastructure Conditional Allowance — conditional allowance for London trunk and distribution main renewals, carried over from PR19" },
+    { "term": "Gated allowance", "definition": "Expenditure released in stages subject to passing independent assurance gates" }
+  ]
+}

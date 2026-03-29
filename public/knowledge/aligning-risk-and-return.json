@@ -1,0 +1,82 @@
+{
+  "document_title": "PR24 final determinations: Aligning risk and return",
+  "slug": "aligning-risk-and-return",
+  "publication_date": "2024-12-19",
+  "source_pdf": "PR24-final-determinations-Aligning-risk-and-return-1.pdf",
+  "key_decisions": [
+    {
+      "decision": "Allowed return on capital",
+      "detail": "Appointee WACC set at 4.03%, up from 3.72% at draft determination, reflecting updated market evidence",
+      "impact_£m": null
+    },
+    {
+      "decision": "Cost of equity",
+      "detail": "Point estimate of 5.10% based on CAPM framework with cross-checks",
+      "impact_£m": null
+    },
+    {
+      "decision": "Notional gearing",
+      "detail": "Maintained at 55%, consistent with draft determination and PR19",
+      "impact_£m": null
+    },
+    {
+      "decision": "Base cost uplift",
+      "detail": "+£5bn sector-wide base cost allowance increase relative to draft determination",
+      "impact_£m": 5000
+    },
+    {
+      "decision": "Aggregate sharing mechanism (ASM)",
+      "detail": "Introduced for outcomes with 300 basis point threshold before sharing triggers",
+      "impact_£m": null
+    },
+    {
+      "decision": "Outcome Adjustment Mechanism (OAM)",
+      "detail": "New mechanism to allow in-period adjustments for performance commitment levels",
+      "impact_£m": null
+    },
+    {
+      "decision": "Developer Delivered Cost Mechanism (DDCM)",
+      "detail": "New mechanism for developer services cost recovery",
+      "impact_£m": null
+    },
+    {
+      "decision": "Dividend yield assumption",
+      "detail": "4% nominal dividend yield for financeability assessment",
+      "impact_£m": null
+    },
+    {
+      "decision": "Target credit rating",
+      "detail": "Financeability assessed at Baa1/BBB+ on notional structure",
+      "impact_£m": null
+    }
+  ],
+  "key_numbers": [
+    { "label": "Appointee WACC (real, CPIH-stripped)", "value": 4.03, "unit": "%", "context": "Final determination, up from 3.72% at draft" },
+    { "label": "Wholesale WACC", "value": 3.97, "unit": "%", "context": "After deducting retail margin" },
+    { "label": "Retail margin deduction", "value": 0.06, "unit": "%", "context": "Deducted from appointee WACC" },
+    { "label": "Cost of equity", "value": 5.10, "unit": "%", "context": "CAPM-derived point estimate" },
+    { "label": "Cost of debt (allowed)", "value": 3.15, "unit": "%", "context": "Blended embedded and new debt" },
+    { "label": "Notional gearing", "value": 55, "unit": "%", "context": "Debt / (debt + equity)" },
+    { "label": "Risk-free rate", "value": 1.52, "unit": "%", "context": "Real, CPIH-stripped" },
+    { "label": "Total market return", "value": "6.68–6.98", "unit": "%", "context": "Range used in CAPM" },
+    { "label": "Equity beta (re-levered)", "value": "0.59–0.65", "unit": "x", "context": "Range used in CAPM" },
+    { "label": "ASM threshold", "value": 300, "unit": "bps", "context": "Basis points of RoRE before aggregate sharing triggers" },
+    { "label": "Sector base cost uplift", "value": 5000, "unit": "£m", "context": "Increase from draft to final determination" },
+    { "label": "Dividend yield assumption", "value": 4.0, "unit": "%", "context": "Nominal, for financeability assessment" }
+  ],
+  "glossary_terms": [
+    { "term": "WACC", "definition": "Weighted Average Cost of Capital — the blended return on debt and equity, weighted by gearing" },
+    { "term": "CAPM", "definition": "Capital Asset Pricing Model — framework for estimating cost of equity from risk-free rate, beta, and market risk premium" },
+    { "term": "RoRE", "definition": "Return on Regulatory Equity — measure of shareholder returns relative to regulatory equity base" },
+    { "term": "TMR", "definition": "Total Market Return — the expected real return on the equity market portfolio" },
+    { "term": "MRP", "definition": "Market Risk Premium (or Equity Risk Premium) — the excess return of the market over the risk-free rate (TMR minus RFR)" },
+    { "term": "Beta", "definition": "Measure of systematic risk — the sensitivity of a company's equity returns to overall market returns" },
+    { "term": "Notional gearing", "definition": "The assumed ratio of debt to total capital (debt + equity) used by Ofwat for the notional efficient company" },
+    { "term": "ASM", "definition": "Aggregate Sharing Mechanism — mechanism that shares extreme outperformance or underperformance on ODIs between company and customers" },
+    { "term": "OAM", "definition": "Outcome Adjustment Mechanism — allows in-period adjustments to performance commitment levels" },
+    { "term": "DDCM", "definition": "Developer Delivered Cost Mechanism — mechanism for adjusting developer services cost allowances" },
+    { "term": "Financeability", "definition": "Assessment of whether a notionally efficient company can maintain investment-grade credit metrics" },
+    { "term": "CPIH", "definition": "Consumer Prices Index including owner-occupiers' housing costs — the inflation index used to strip real returns" },
+    { "term": "RCV", "definition": "Regulatory Capital Value — the regulated asset base on which companies earn a return" }
+  ]
+}

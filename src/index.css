@@ -1,0 +1,24 @@
+@import './styles/theme.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: var(--fs-font-body);
+  background: var(--fs-background);
+  color: var(--fs-text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 14px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--fs-font-heading);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--fs-border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--fs-text-secondary); }

@@ -1,0 +1,76 @@
+{
+  "document_title": "PR24 final determinations: Aligning risk and return — Allowed return Appendix",
+  "slug": "allowed-return-appendix",
+  "publication_date": "2025-03-06",
+  "source_pdf": "PR24-final-determinations-Aligning-risk-and-return-Allowed-return-Appendix.pdf",
+  "key_decisions": [
+    {
+      "decision": "CAPM framework retained for cost of equity",
+      "detail": "Continued use of CAPM as primary methodology with cross-checks from MAR-implied cost of equity, broker WACC estimates, and financeability analysis",
+      "impact_£m": null
+    },
+    {
+      "decision": "Risk-free rate methodology",
+      "detail": "Based on index-linked gilts (ILGs), using 1-month and 6-month trailing averages of 20-year ILGs, yielding 1.52% real CPIH-stripped",
+      "impact_£m": null
+    },
+    {
+      "decision": "Total market return range",
+      "detail": "6.68%–6.98% real CPIH-stripped, drawing on long-run historical ex-post and ex-ante evidence",
+      "impact_£m": null
+    },
+    {
+      "decision": "Beta estimation",
+      "detail": "Used Severn Trent plc and United Utilities plc as listed comparators; 2-year and 5-year estimation windows with daily and monthly frequencies",
+      "impact_£m": null
+    },
+    {
+      "decision": "Cost of equity point estimate above range",
+      "detail": "Selected 5.10% point estimate, above the top of the 4.56%–5.07% CAPM range, reflecting aiming-up and cross-check evidence",
+      "impact_£m": null
+    },
+    {
+      "decision": "Embedded debt approach",
+      "detail": "Balance sheet-based benchmark using actual company debt portfolios and iBoxx indices; 2.77% allowed",
+      "impact_£m": null
+    },
+    {
+      "decision": "New debt allowance",
+      "detail": "Forward-looking benchmark based on iBoxx A/BBB 10yr+ non-financials with a forward adjustment; 3.74% allowed",
+      "impact_£m": null
+    },
+    {
+      "decision": "Share of new debt at 24%",
+      "detail": "Based on notional company refinancing profile over 2025-30",
+      "impact_£m": null
+    }
+  ],
+  "key_numbers": [
+    { "label": "Risk-free rate", "value": 1.52, "unit": "%", "context": "Real CPIH-stripped, from 20-year ILG yields" },
+    { "label": "TMR low", "value": 6.68, "unit": "%", "context": "Bottom of total market return range" },
+    { "label": "TMR high", "value": 6.98, "unit": "%", "context": "Top of total market return range" },
+    { "label": "MRP low", "value": 5.16, "unit": "%", "context": "TMR low minus RFR" },
+    { "label": "MRP high", "value": 5.46, "unit": "%", "context": "TMR high minus RFR" },
+    { "label": "Raw equity beta low", "value": 0.58, "unit": "x", "context": "From listed comparators" },
+    { "label": "Raw equity beta high", "value": 0.60, "unit": "x", "context": "From listed comparators" },
+    { "label": "Re-levered equity beta low", "value": 0.59, "unit": "x", "context": "At 55% notional gearing" },
+    { "label": "Re-levered equity beta high", "value": 0.65, "unit": "x", "context": "At 55% notional gearing" },
+    { "label": "Cost of equity (CAPM range low)", "value": 4.56, "unit": "%", "context": "Bottom of CAPM range" },
+    { "label": "Cost of equity (CAPM range high)", "value": 5.07, "unit": "%", "context": "Top of CAPM range" },
+    { "label": "Cost of equity point estimate", "value": 5.10, "unit": "%", "context": "Selected above range" },
+    { "label": "Embedded debt rate", "value": 2.77, "unit": "%", "context": "Balance sheet benchmark" },
+    { "label": "New debt rate", "value": 3.74, "unit": "%", "context": "Forward-looking benchmark" },
+    { "label": "Share of new debt", "value": 24, "unit": "%", "context": "Notional company refinancing profile" },
+    { "label": "Issuance and liquidity costs", "value": 0.15, "unit": "%", "context": "Added to cost of debt" },
+    { "label": "Allowed return on debt", "value": 3.15, "unit": "%", "context": "Blended cost of debt" },
+    { "label": "Appointee WACC", "value": 4.03, "unit": "%", "context": "Final determination" },
+    { "label": "Wholesale WACC", "value": 3.97, "unit": "%", "context": "After retail margin deduction" }
+  ],
+  "glossary_terms": [
+    { "term": "ILG", "definition": "Index-Linked Gilt — UK government bond with returns linked to RPI inflation" },
+    { "term": "iBoxx", "definition": "Markit iBoxx indices — bond market benchmarks used to estimate cost of debt" },
+    { "term": "MAR", "definition": "Market-to-Asset Ratio — ratio of enterprise value to RCV, used as cross-check on allowed returns" },
+    { "term": "Aiming up", "definition": "Regulatory practice of setting the allowed return above the midpoint estimate to reduce the risk of under-investment" },
+    { "term": "CPIH-stripping", "definition": "Converting nominal or RPI-linked returns to a real CPIH basis using the RPI-CPIH wedge" }
+  ]
+}

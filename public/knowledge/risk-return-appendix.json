@@ -1,0 +1,41 @@
+{
+  "document_title": "PR24 final determinations: Expenditure allowances — Assurance requirements for delivery of enhancement schemes appendix",
+  "slug": "risk-return-appendix",
+  "publication_date": "2025-01-24",
+  "source_pdf": "PR24-final-determinations-Aligning-risk-and-return-appendix-1.pdf",
+  "key_decisions": [
+    {
+      "decision": "Third-party assurance requirement",
+      "detail": "Companies must submit enhancement delivery plans with independent third-party assurance for all schemes above a materiality threshold within 6 months of FD publication",
+      "impact_£m": null
+    },
+    {
+      "decision": "Price Control Deliverables (PCDs) framework",
+      "detail": "PCDs set for enhancement schemes to protect customers — payments clawed back at PR29 if outputs not delivered",
+      "impact_£m": null
+    },
+    {
+      "decision": "Large gated scheme process",
+      "detail": "Schemes above £200m subject to gating with independent assurance at each gate before funding released",
+      "impact_£m": null
+    },
+    {
+      "decision": "Enhancement programme scale",
+      "detail": "Total enhancement programme of up to £44bn for AMP8, approximately four times the PR19 level",
+      "impact_£m": 44000
+    }
+  ],
+  "key_numbers": [
+    { "label": "Total enhancement programme", "value": 44000, "unit": "£m", "context": "Total enhancement expenditure for 2025-30, ~4× PR19" },
+    { "label": "Storm overflow investment", "value": 11300, "unit": "£m", "context": "Sector-wide storm overflow improvements" },
+    { "label": "Nature-based solutions", "value": 3300, "unit": "£m", "context": "Sector-wide investment in nature-based solutions" },
+    { "label": "Net zero challenge fund", "value": 500, "unit": "£m", "context": "Fund to support net zero ambitions" },
+    { "label": "Resilience investment (minimum)", "value": 1500, "unit": "£m", "context": "Minimum sector-wide resilience investment" }
+  ],
+  "glossary_terms": [
+    { "term": "PCD", "definition": "Price Control Deliverable — mechanism to protect customers if companies do not deliver enhancement outputs; payments clawed back at PR29" },
+    { "term": "Gated allowance", "definition": "Expenditure allowance released in stages subject to companies passing independent assurance gates" },
+    { "term": "WINEP", "definition": "Water Industry National Environment Programme — the programme of environmental improvements required by environmental regulators" },
+    { "term": "NEP", "definition": "National Environment Programme — Welsh equivalent of WINEP" }
+  ]
+}

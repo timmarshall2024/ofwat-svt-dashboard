@@ -1,0 +1,31 @@
+:root {
+  /* Fox Stephens brand colours */
+  --fs-primary:        #005030;
+  --fs-secondary:      #F47321;
+  --fs-background:     #FFFFFF;
+  --fs-surface:        #FFFFFF;
+  --fs-text-primary:   #2D2D2D;
+  --fs-text-secondary: #6b6b6b;
+  --fs-border:         #E0E0E0;
+  --fs-success:        #005030;
+  --fs-warning:        #d97706;
+  --fs-highlight:      #F47321;
+
+  /* Derived tints */
+  --fs-primary-light:    #e6f4ef;
+  --fs-secondary-light:  #fff0e6;
+  --fs-primary-dark:     #003d24;
+
+  /* Typography */
+  --fs-font-heading: 'Times New Roman', Times, serif;
+  --fs-font-body:    'Times New Roman', Times, serif;
+
+  /* Border radius */
+  --fs-radius-sm: 4px;
+  --fs-radius-md: 6px;
+  --fs-radius-lg: 6px;
+
+  /* Shadows */
+  --fs-shadow:    0 1px 4px rgba(0,0,0,.08);
+  --fs-shadow-md: 0 4px 8px rgba(0,0,0,.08);
+}

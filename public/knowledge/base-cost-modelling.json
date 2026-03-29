@@ -1,0 +1,60 @@
+{
+  "document_title": "PR24 final determinations: Expenditure allowances — Base cost modelling decision appendix",
+  "slug": "base-cost-modelling",
+  "publication_date": "2024-12-19",
+  "source_pdf": "PR24-final-determinations-Expenditure-allowances-Base-cost-modelling-decision-appendix.pdf",
+  "key_decisions": [
+    {
+      "decision": "Wholesale water base cost models",
+      "detail": "6 Water Resource Plus (WRP), 6 Treated Water Distribution (TWD), and 12 combined Wholesale Water (WW) econometric models using random effects panel data 2011-12 to 2023-24",
+      "impact_£m": null
+    },
+    {
+      "decision": "Wastewater network plus base cost models",
+      "detail": "3 Sewage Collection (SWC), 2 Sewage Treatment (SWT), and 2 combined Wastewater Network Plus (WWNP) models",
+      "impact_£m": null
+    },
+    {
+      "decision": "Bioresources base cost models",
+      "detail": "4 unit cost models; included historical sludge quality enhancement expenditure (change from draft)",
+      "impact_£m": null
+    },
+    {
+      "decision": "Residential retail base cost models",
+      "detail": "2 bad debt models, 2 other retail cost models, and 4 total retail cost models",
+      "impact_£m": null
+    },
+    {
+      "decision": "EA water quality permit costs excluded",
+      "detail": "Excluded Environment Agency water quality permit costs from modelled base costs (change from draft)",
+      "impact_£m": null
+    },
+    {
+      "decision": "Panel data estimation method",
+      "detail": "Random effects estimation over 13 years (2011-12 to 2023-24)",
+      "impact_£m": null
+    }
+  ],
+  "key_numbers": [
+    { "label": "WRP models", "value": 6, "unit": "models", "context": "Water Resource Plus econometric models" },
+    { "label": "TWD models", "value": 6, "unit": "models", "context": "Treated Water Distribution econometric models" },
+    { "label": "WW models", "value": 12, "unit": "models", "context": "Combined Wholesale Water econometric models" },
+    { "label": "SWC models", "value": 3, "unit": "models", "context": "Sewage Collection econometric models" },
+    { "label": "SWT models", "value": 2, "unit": "models", "context": "Sewage Treatment econometric models" },
+    { "label": "WWNP models", "value": 2, "unit": "models", "context": "Combined Wastewater Network Plus models" },
+    { "label": "Bioresources models", "value": 4, "unit": "models", "context": "Unit cost models" },
+    { "label": "Panel data window", "value": 13, "unit": "years", "context": "2011-12 to 2023-24" },
+    { "label": "Bad debt models", "value": 2, "unit": "models", "context": "Residential retail" },
+    { "label": "Total retail models", "value": 4, "unit": "models", "context": "Residential retail" }
+  ],
+  "glossary_terms": [
+    { "term": "Random effects", "definition": "Panel data econometric estimation method treating company-specific effects as random" },
+    { "term": "WRP", "definition": "Water Resource Plus — water resources and water treatment combined price control" },
+    { "term": "TWD", "definition": "Treated Water Distribution — distribution of treated water price control" },
+    { "term": "SWC", "definition": "Sewage Collection — sewerage network price control component" },
+    { "term": "SWT", "definition": "Sewage Treatment — sewage treatment works price control component" },
+    { "term": "WWNP", "definition": "Wastewater Network Plus — combined wastewater network and treatment price control" },
+    { "term": "Translog", "definition": "Transcendental logarithmic functional form — flexible functional form used in some cost models" },
+    { "term": "Cobb-Douglas", "definition": "Log-linear functional form used as alternative to translog in some cost models" }
+  ]
+}

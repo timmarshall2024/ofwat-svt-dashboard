@@ -1,0 +1,76 @@
+{
+  "generated": "2026-03-28",
+  "description": "Index of structured knowledge extracted from Ofwat PR24 Final Determination PDFs",
+  "documents": [
+    {
+      "slug": "svt-overview",
+      "file": "svt-overview.json",
+      "title": "Overview of Severn Trent Water's PR24 final determination",
+      "date": "2025-04-17",
+      "summary": "SVT-specific overview covering Outstanding business plan rating, £15bn total expenditure, bill impacts, key performance commitments, and enhancement investment priorities."
+    },
+    {
+      "slug": "aligning-risk-and-return",
+      "file": "aligning-risk-and-return.json",
+      "title": "PR24 final determinations: Aligning risk and return",
+      "date": "2024-12-19",
+      "summary": "Sector-wide policy document setting allowed return at 4.03% WACC, cost of equity 5.10%, notional gearing 55%, and introducing ASM, OAM, and DDCM mechanisms."
+    },
+    {
+      "slug": "allowed-return-appendix",
+      "file": "allowed-return-appendix.json",
+      "title": "PR24 final determinations: Aligning risk and return — Allowed return Appendix",
+      "date": "2025-03-06",
+      "summary": "Detailed CAPM build-up methodology for the 4.03% allowed return, covering risk-free rate, TMR, beta estimation, and cost of debt components."
+    },
+    {
+      "slug": "risk-return-appendix",
+      "file": "risk-return-appendix.json",
+      "title": "PR24 final determinations: Expenditure allowances — Assurance requirements for delivery of enhancement schemes appendix",
+      "date": "2025-01-24",
+      "summary": "Framework for PCDs, gated allowances, and third-party assurance requirements for the £44bn enhancement programme."
+    },
+    {
+      "slug": "expenditure-allowances",
+      "file": "expenditure-allowances.json",
+      "title": "PR24 final determinations: Expenditure allowances",
+      "date": "2024-12-19",
+      "summary": "Core expenditure document setting £104bn sector allowances with 7% cost challenge; SVT allowed £14.9bn total (base £8.6bn, enhancement £6.7bn)."
+    },
+    {
+      "slug": "expenditure-allowances-amended",
+      "file": "expenditure-allowances-amended.json",
+      "title": "PR24 final determinations: Expenditure allowances (amended February 2025)",
+      "date": "2025-02-01",
+      "summary": "Amended version of the expenditure allowances document with corrections including Anglian adjustment figure; SVT figures unchanged."
+    },
+    {
+      "slug": "base-cost-modelling",
+      "file": "base-cost-modelling.json",
+      "title": "PR24 final determinations: Expenditure allowances — Base cost modelling decision appendix",
+      "date": "2024-12-19",
+      "summary": "Technical appendix detailing 35+ econometric models used for base cost benchmarking across water, wastewater, bioresources, and retail."
+    },
+    {
+      "slug": "enhancement-cost-modelling",
+      "file": "enhancement-cost-modelling.json",
+      "title": "PR24 final determinations: Expenditure allowances — Enhancement cost modelling appendix",
+      "date": "2024-12-19",
+      "summary": "Scheme-level OLS and random effects models for enhancement cost benchmarking covering storm overflows, phosphorus, metering, and other programmes."
+    },
+    {
+      "slug": "thames-gated-allowance",
+      "file": "thames-gated-allowance.json",
+      "title": "PR24 final determinations: Expenditure allowances — Thames Water gated allowance appendix",
+      "date": "2024-12-19",
+      "summary": "Thames Water-specific gated allowances: £1bn asset improvement, £250m growth at STWs, £49m LWICA carryover, with 6-gate assurance process."
+    }
+  ],
+  "special_files": [
+    {
+      "file": "wacc_buildup.json",
+      "title": "CAPM Build-up Table (Table 1 from Allowed Return Appendix)",
+      "description": "Full WACC decomposition from risk-free rate through to wholesale WACC, with ranges for each CAPM component."
+    }
+  ]
+}

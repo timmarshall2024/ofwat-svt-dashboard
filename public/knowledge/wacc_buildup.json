@@ -1,0 +1,99 @@
+{
+  "title": "PR24 Final Determination — CAPM Build-up (Table 1)",
+  "source_pdf": "PR24-final-determinations-Aligning-risk-and-return-Allowed-return-Appendix.pdf",
+  "publication_date": "2025-03-06",
+  "basis": "Real, CPIH-stripped",
+  "components": {
+    "notional_gearing": {
+      "value": 55.0,
+      "unit": "%"
+    },
+    "cost_of_equity": {
+      "risk_free_rate": {
+        "low": 1.52,
+        "high": 1.52,
+        "point": 1.52,
+        "unit": "%"
+      },
+      "total_market_return": {
+        "low": 6.68,
+        "high": 6.98,
+        "unit": "%"
+      },
+      "market_risk_premium": {
+        "low": 5.16,
+        "high": 5.46,
+        "unit": "%",
+        "note": "TMR minus RFR"
+      },
+      "raw_equity_beta": {
+        "low": 0.58,
+        "high": 0.60,
+        "unit": "x"
+      },
+      "unlevered_beta": {
+        "low": 0.27,
+        "high": 0.30,
+        "unit": "x"
+      },
+      "debt_beta": {
+        "low": 0.15,
+        "high": 0.05,
+        "unit": "x"
+      },
+      "relevered_equity_beta": {
+        "low": 0.59,
+        "high": 0.65,
+        "unit": "x"
+      },
+      "cost_of_equity_range": {
+        "low": 4.56,
+        "high": 5.07,
+        "unit": "%",
+        "note": "RFR + beta × MRP"
+      },
+      "cost_of_equity_point": {
+        "value": 5.10,
+        "unit": "%",
+        "note": "Selected point estimate above top of range, reflecting cross-checks"
+      }
+    },
+    "cost_of_debt": {
+      "embedded_debt": {
+        "value": 2.77,
+        "unit": "%"
+      },
+      "new_debt": {
+        "value": 3.74,
+        "unit": "%"
+      },
+      "share_of_new_debt": {
+        "value": 24.0,
+        "unit": "%"
+      },
+      "issuance_and_liquidity_costs": {
+        "value": 0.15,
+        "unit": "%"
+      },
+      "allowed_return_on_debt": {
+        "value": 3.15,
+        "unit": "%"
+      }
+    },
+    "wacc": {
+      "appointee_wacc": {
+        "value": 4.03,
+        "unit": "%",
+        "note": "Vanilla WACC = g × Rd + (1-g) × Re"
+      },
+      "retail_margin_deduction": {
+        "value": 0.06,
+        "unit": "%"
+      },
+      "wholesale_wacc": {
+        "value": 3.97,
+        "unit": "%"
+      }
+    }
+  }
+}

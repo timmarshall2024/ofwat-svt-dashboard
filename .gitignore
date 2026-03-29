@@ -1,0 +1,17 @@
+node_modules/
+dist/
+public/data/
+
+*.db
+ofwat_fd_pre2c_backup.db
+ingestion.log
+unmapped_headers.txt
+
+*.pyc
+__pycache__/
+
+.DS_Store
+.env
+.env.*
+public/data/
+data/

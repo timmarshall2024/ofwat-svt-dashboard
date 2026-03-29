@@ -1,0 +1,31 @@
+{
+  "document_title": "PR24 final determinations: Expenditure allowances (amended February 2025)",
+  "slug": "expenditure-allowances-amended",
+  "publication_date": "2025-02-01",
+  "source_pdf": "PR24-final-determinations-Expenditure-allowances-1.pdf",
+  "note": "Amended version of the December 2024 expenditure allowances document. Corrections include Anglian adjustment figure (Table 4, p39) to £144.4m. Core content unchanged from original.",
+  "key_decisions": [
+    {
+      "decision": "Total sector expenditure allowances",
+      "detail": "Up to £104bn for 2025-30 against company requests of £112bn, a 7% overall cost challenge",
+      "impact_£m": 104000
+    },
+    {
+      "decision": "SVT total expenditure (post frontier shift)",
+      "detail": "£14,917m vs company request of £15,689m",
+      "impact_£m": 14917
+    },
+    {
+      "decision": "Anglian adjustment correction",
+      "detail": "Table 4 corrected: Anglian adjustment figure amended to £144.4m (correction dated 20/12/2025)",
+      "impact_£m": 144.4
+    }
+  ],
+  "key_numbers": [
+    { "label": "SVT total post-frontier shift (Ofwat)", "value": 14917, "unit": "£m (2022-23 prices)", "context": "Unchanged from original" },
+    { "label": "SVT base expenditure (Ofwat)", "value": 8554, "unit": "£m (2022-23 prices)", "context": "Unchanged from original" },
+    { "label": "SVT enhancement expenditure (Ofwat)", "value": 6679, "unit": "£m (2022-23 prices)", "context": "Unchanged from original" },
+    { "label": "Anglian adjustment (corrected)", "value": 144.4, "unit": "£m", "context": "Table 4 correction in amended version" }
+  ],
+  "glossary_terms": []
+}
