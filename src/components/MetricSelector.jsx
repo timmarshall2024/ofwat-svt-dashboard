@@ -12,76 +12,103 @@ const DOMAIN_OPTIONS = [
   { value: '6. Risk & Return', label: 'Risk & uncertainty' },
 ]
 
-const DEFAULT_SEARCHES = [
-  'bill profile for 2025-30',
-  'average household bill',
-  'household bill',
-]
+const RECOMMENDED = {
+  '1. Cost Assessment': ['allowed totex', 'base cost', 'enhancement'],
+  '2. Performance Commitments': ['leakage', 'supply interruptions', 'pollution incidents', 'sewer flooding', 'per capita consumption'],
+  '3. Outcomes & ODIs': ['net odi', 'odi rate', 'rore'],
+  '4. Price Determination': ['allowed revenue', 'rcv', 'household bill'],
+  '5. Financial Resilience': ['wacc', 'allowed return', 'gearing', 'aicr'],
+  '6. Risk & Return': ['p10', 'p50', 'p90'],
+}
 
-export default function MetricSelector({ metrics: metricsProp, value, onChange, defaultPriorityOnly = true }) {
-  const { metrics: contextMetrics, searchMetrics } = useMetricData()
-  const allMetrics = metricsProp || contextMetrics || []
+const DEFAULT_PRIORITY_SEARCHES = ['average household bill', 'household bill', 'bill profile']
 
+function matchesRecommended(metric, domain) {
+  const searches = RECOMMENDED[domain]
+  if (!searches) return false
+  const name = (metric.name || '').toLowerCase()
+  return searches.some(s => name.includes(s))
+}
+
+function findDefaultForDomain(metrics, domain) {
+  if (domain === '__priority__' || domain === '__all__') {
+    const pool = domain === '__priority__'
+      ? metrics.filter(m => m.is_svt_priority)
+      : metrics
+    for (const search of DEFAULT_PRIORITY_SEARCHES) {
+      const found = pool.find(m => m.name && m.name.toLowerCase().includes(search))
+      if (found) return found.id
+    }
+    const sorted = pool.slice().sort((a, b) => (a.name || '').localeCompare(b.name || ''))
+    return sorted[0]?.id ?? null
+  }
+  // Specific domain — pick first recommended, else first alphabetically
+  const domainMetrics = metrics.filter(m => m.taxonomy_domain === domain)
+  const recs = RECOMMENDED[domain] || []
+  for (const search of recs) {
+    const found = domainMetrics.find(m => m.name && m.name.toLowerCase().includes(search))
+    if (found) return found.id
+  }
+  const sorted = domainMetrics.slice().sort((a, b) => (a.name || '').localeCompare(b.name || ''))
+  return sorted[0]?.id ?? null
+}
+
+export default function MetricSelector({ value, onChange }) {
+  const { metrics: contextMetrics } = useMetricData()
+  const allMetrics = contextMetrics || []
+
+  // Domain always starts at __priority__ — set directly, never overridden on mount
   const [domain, setDomain] = useState('__priority__')
   const [query, setQuery] = useState('')
   const [open, setOpen] = useState(false)
-  const [initialised, setInitialised] = useState(false)
   const containerRef = useRef(null)
   const inputRef = useRef(null)
-  const skipSyncRef = useRef(false)
 
-  // Set default metric on first load if none selected
+  // Track whether we've done the one-time init (auto-select default or sync from route)
+  const didInitRef = useRef(false)
+  // Track previous value prop so sync effect only fires on actual changes
+  const prevValueRef = useRef(value)
+
+  // One-time init: when metrics first load, either auto-select default or sync
+  // domain from a routed value. Runs exactly once.
   useEffect(() => {
-    if (initialised || !allMetrics.length) return
-    setInitialised(true)
-    if (value) {
-      // If a metric is already selected via route, match the domain
+    if (didInitRef.current || !allMetrics.length) return
+    didInitRef.current = true
+
+    if (!value) {
+      // No metric selected — pick default for priority domain
+      const defaultId = findDefaultForDomain(allMetrics, '__priority__')
+      if (defaultId) {
+        prevValueRef.current = defaultId
+        onChange(defaultId)
+      }
+    } else {
+      // Value already set (e.g. from route param) — sync domain to match
       const m = allMetrics.find(x => x.id === value)
       if (m) {
         if (m.is_svt_priority) {
-          setDomain('__priority__')
+          // Already __priority__, no-op
         } else if (m.taxonomy_domain) {
           setDomain(m.taxonomy_domain)
         }
       }
-      skipSyncRef.current = true
-      return
     }
-    // No value yet — select default metric (household bill)
-    let def = null
-    for (const search of DEFAULT_SEARCHES) {
-      def = allMetrics.find(x =>
-        x.is_svt_priority && x.name && x.name.toLowerCase().includes(search)
-      )
-      if (def) break
-    }
-    if (def) {
-      setDomain('__priority__')
-      skipSyncRef.current = true
-      onChange(def.id)
-    }
-  }, [allMetrics, value, initialised, onChange])
+  }, [allMetrics.length]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Sync domain when value changes externally (e.g. navigation from MetricExplorer)
+  // Sync domain when value changes externally (e.g. MetricExplorer → Benchmarking)
+  // Only fires on actual value changes, never on mount.
   useEffect(() => {
-    if (skipSyncRef.current) {
-      skipSyncRef.current = false
-      return
-    }
+    if (prevValueRef.current === value) return
+    prevValueRef.current = value
     if (!value || !allMetrics.length) return
     const m = allMetrics.find(x => x.id === value)
     if (!m) return
-    // If current domain is priority and metric is priority, keep it
     if (domain === '__priority__' && m.is_svt_priority) return
-    // If current domain matches metric's domain, keep it
     if (domain === m.taxonomy_domain) return
-    // If all domains, keep it
-    if (domain === '__all__') return
-    // Otherwise switch to correct domain
     if (m.is_svt_priority) {
       setDomain('__priority__')
-    } else {
-      setDomain(m.taxonomy_domain || '__all__')
+    } else if (m.taxonomy_domain) {
+      setDomain(m.taxonomy_domain)
     }
   }, [value, allMetrics, domain])
 
@@ -94,7 +121,20 @@ export default function MetricSelector({ metrics: metricsProp, value, onChange, 
     return () => document.removeEventListener('mousedown', handleClick)
   }, [])
 
-  // Filtered metrics based on domain + search query
+  // Domain change: update domain, auto-select first metric, call onChange
+  function handleDomainChange(newDomain) {
+    setDomain(newDomain)
+    setQuery('')
+    setOpen(false)
+    if (!allMetrics.length) return
+    const defaultId = findDefaultForDomain(allMetrics, newDomain)
+    if (defaultId) {
+      prevValueRef.current = defaultId
+      onChange(defaultId)
+    }
+  }
+
+  // Filtered metrics for current domain + search query
   const filteredMetrics = useMemo(() => {
     if (!allMetrics.length) return []
     let filtered
@@ -108,33 +148,71 @@ export default function MetricSelector({ metrics: metricsProp, value, onChange, 
     if (query) {
       const q = query.toLowerCase()
       filtered = filtered.filter(m =>
-        m.name.toLowerCase().includes(q) ||
+        (m.name || '').toLowerCase().includes(q) ||
         (m.reference || '').toLowerCase().includes(q)
       )
     }
     return filtered
   }, [allMetrics, domain, query])
 
-  // Group metrics by domain (only for priority view)
-  const groupedMetrics = useMemo(() => {
-    if (domain !== '__priority__') {
-      return [{ domain: null, items: filteredMetrics.slice().sort((a, b) => a.name.localeCompare(b.name)) }]
+  // Group metrics for the dropdown list
+  const groups = useMemo(() => {
+    // Priority view: group by domain (same as before)
+    if (domain === '__priority__') {
+      const byDomain = {}
+      for (const m of filteredMetrics) {
+        const d = m.taxonomy_domain || 'Other'
+        if (!byDomain[d]) byDomain[d] = []
+        byDomain[d].push(m)
+      }
+      return Object.entries(byDomain)
+        .sort(([a], [b]) => a.localeCompare(b))
+        .map(([d, items]) => ({
+          header: DOMAIN_OPTIONS.find(o => o.value === d)?.label || d.replace(/^\d+\.\s*/, ''),
+          style: 'domain',
+          items: items.sort((a, b) => a.name.localeCompare(b.name)),
+          showDot: false,
+        }))
     }
-    const groups = {}
-    for (const m of filteredMetrics) {
-      const d = m.taxonomy_domain || 'Other'
-      if (!groups[d]) groups[d] = []
-      groups[d].push(m)
-    }
-    return Object.entries(groups)
-      .sort(([a], [b]) => a.localeCompare(b))
-      .map(([domain, items]) => ({
-        domain,
-        items: items.sort((a, b) => a.name.localeCompare(b.name)),
-      }))
-  }, [filteredMetrics, domain])
 
-  const totalFiltered = filteredMetrics.length
+    // All domains: flat alphabetical, no grouping
+    if (domain === '__all__') {
+      return [{
+        header: null,
+        style: null,
+        items: filteredMetrics.slice().sort((a, b) => a.name.localeCompare(b.name)),
+        showDot: false,
+      }]
+    }
+
+    // Specific domain: recommended group + remaining group
+    const recs = !query
+      ? filteredMetrics.filter(m => matchesRecommended(m, domain))
+      : []
+    const recIds = new Set(recs.map(m => m.id))
+    const remaining = filteredMetrics.filter(m => !recIds.has(m.id))
+
+    const result = []
+    if (recs.length > 0) {
+      result.push({
+        header: 'Recommended',
+        style: 'recommended',
+        items: recs.sort((a, b) => a.name.localeCompare(b.name)),
+        showDot: true,
+      })
+    }
+    const otherItems = query ? filteredMetrics : remaining
+    if (otherItems.length > 0) {
+      result.push({
+        header: recs.length > 0 ? 'All metrics' : null,
+        style: recs.length > 0 ? 'all' : null,
+        items: otherItems.slice().sort((a, b) => a.name.localeCompare(b.name)),
+        showDot: false,
+      })
+    }
+    return result
+  }, [filteredMetrics, domain, query])
+
   const selectedMetric = value ? allMetrics.find(m => m.id === value) : null
 
   return (
@@ -144,7 +222,7 @@ export default function MetricSelector({ metrics: metricsProp, value, onChange, 
         <div className="sm:w-[200px] sm:min-w-[200px] border-b sm:border-b-0 sm:border-r border-[#E0E0E0]">
           <select
             value={domain}
-            onChange={e => { setDomain(e.target.value); setQuery(''); setOpen(false) }}
+            onChange={e => handleDomainChange(e.target.value)}
             className="w-full px-3 py-2.5 text-sm bg-white text-[#2D2D2D] border-0 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#005030] cursor-pointer appearance-none"
             style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b6b6b' d='M3 5l3 3 3-3'/%3E%3C/svg%3E\")", backgroundRepeat: 'no-repeat', backgroundPosition: 'right 10px center' }}
           >
@@ -173,30 +251,40 @@ export default function MetricSelector({ metrics: metricsProp, value, onChange, 
           {/* Dropdown */}
           {open && (
             <div className="absolute z-50 left-0 right-0 mt-0 max-h-[320px] overflow-y-auto bg-white border border-[#E0E0E0] border-t-0 rounded-b-fs-md shadow-fs-md">
-              {totalFiltered === 0 ? (
+              {filteredMetrics.length === 0 ? (
                 <div className="px-3 py-4 text-sm text-[#6b6b6b] text-center">No results</div>
               ) : (
-                groupedMetrics.map((group, gi) => (
+                groups.map((group, gi) => (
                   <div key={gi}>
-                    {group.domain && (
-                      <div className="sticky top-0 px-3 py-1.5 text-[10px] font-medium uppercase tracking-wider bg-[#E8F5E9] text-[#005030]">
-                        {DOMAIN_OPTIONS.find(d => d.value === group.domain)?.label || group.domain.replace(/^\d+\.\s*/, '')}
+                    {group.header && (
+                      <div className={`sticky top-0 px-3 py-1.5 text-[10px] font-medium uppercase tracking-wider ${
+                        group.style === 'domain' || group.style === 'recommended'
+                          ? 'bg-[#E8F5E9] text-[#005030]'
+                          : 'bg-[#F5F5F5] text-[#6b6b6b]'
+                      }`}>
+                        {group.style === 'recommended' || group.style === 'all'
+                          ? `── ${group.header} ──`
+                          : group.header}
                       </div>
                     )}
                     {group.items.map(m => (
                       <button
                         key={m.id}
-                        className={`w-full text-left px-3 py-2 text-sm flex items-center justify-between gap-2 transition-colors hover:bg-[#E8F5E9] ${
+                        className={`w-full text-left px-3 py-2 text-sm flex items-center gap-2 transition-colors hover:bg-[#E8F5E9] ${
                           m.id === value ? 'bg-[#E8F5E9] font-medium' : ''
                         }`}
                         onClick={() => {
+                          prevValueRef.current = m.id
                           onChange(m.id)
                           setQuery('')
                           setOpen(false)
                         }}
                       >
-                        <span className="truncate text-[#2D2D2D]">{m.name}</span>
-                        {m.unit && <span className="text-xs text-[#6b6b6b] whitespace-nowrap flex-shrink-0">{m.unit}</span>}
+                        {group.showDot && (
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#005030] shrink-0" />
+                        )}
+                        <span className="truncate text-[#2D2D2D] flex-1">{m.name}</span>
+                        {m.unit && <span className="text-xs text-[#6b6b6b] whitespace-nowrap shrink-0">{m.unit}</span>}
                       </button>
                     ))}
                   </div>
