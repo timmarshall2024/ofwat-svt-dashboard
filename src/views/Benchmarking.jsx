@@ -12,7 +12,7 @@ import { useBenchmarkData } from '../hooks/useBenchmarkData'
 import { formatValue, domainLabel } from '../utils/formatters'
 import { chartTheme } from '../styles/chartTheme'
 
-const DEFAULT_METRIC = 10341
+const DEFAULT_METRIC = null
 
 function domainToSlug(domain) {
   const d = (domain || '').toLowerCase()

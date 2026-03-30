@@ -18,7 +18,7 @@ export default function MetricSelector({ metrics: metricsProp, value, onChange, 
   const { metrics: contextMetrics, searchMetrics } = useMetricData()
   const allMetrics = metricsProp || contextMetrics || []
 
-  const [domain, setDomain] = useState(defaultPriorityOnly ? '__priority__' : '__all__')
+  const [domain, setDomain] = useState('__priority__')
   const [query, setQuery] = useState('')
   const [open, setOpen] = useState(false)
   const [initialised, setInitialised] = useState(false)
@@ -41,11 +41,14 @@ export default function MetricSelector({ metrics: metricsProp, value, onChange, 
       }
       return
     }
-    // Select default metric
+    // No value yet — select default metric (household bill)
     const def = allMetrics.find(x =>
       x.is_svt_priority && x.name && x.name.toLowerCase().includes('bill profile for 2025-30')
     )
-    if (def) onChange(def.id)
+    if (def) {
+      setDomain('__priority__')
+      onChange(def.id)
+    }
   }, [allMetrics, value, initialised, onChange])
 
   // Sync domain when value changes externally (e.g. navigation from MetricExplorer)
@@ -65,7 +68,7 @@ export default function MetricSelector({ metrics: metricsProp, value, onChange, 
     } else {
       setDomain(m.taxonomy_domain || '__all__')
     }
-  }, [value, allMetrics])
+  }, [value, allMetrics, domain])
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -143,6 +146,7 @@ export default function MetricSelector({ metrics: metricsProp, value, onChange, 
           <input
             ref={inputRef}
             type="text"
+            autoComplete="off"
             className="w-full px-3 py-2.5 text-sm bg-white text-[#2D2D2D] placeholder-[#6b6b6b] border-0 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#005030]"
             placeholder={selectedMetric ? selectedMetric.name : 'Type to search metrics...'}
             value={query}
