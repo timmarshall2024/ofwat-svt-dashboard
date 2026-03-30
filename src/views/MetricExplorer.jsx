@@ -87,9 +87,13 @@ export default function MetricExplorer() {
   }, [svtData])
 
   const filtered = useMemo(() => {
-    setPage(0)
     return searchMetrics(query, { domain: domainFilter, unit: unitFilter, priorityOnly })
   }, [query, domainFilter, unitFilter, priorityOnly, searchMetrics])
+
+  // Reset page when filters change (must be in useEffect, not useMemo)
+  useEffect(() => {
+    setPage(0)
+  }, [query, domainFilter, unitFilter, priorityOnly])
 
   const pageData = filtered.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE)
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE)
@@ -127,7 +131,7 @@ export default function MetricExplorer() {
 
   const closeContextPanel = useCallback(() => { setContextSlug(null); setContextTopic(null) }, [])
 
-  if (ctxLoading) return <LoadingSpinner message="Loading metrics..." />
+  if (ctxLoading && !metrics?.length) return <LoadingSpinner message="Loading metrics..." />
 
   return (
     <div className="flex gap-0">

@@ -12,7 +12,11 @@ const DOMAIN_OPTIONS = [
   { value: '6. Risk & Return', label: 'Risk & uncertainty' },
 ]
 
-const DEFAULT_METRIC_NAME = 'Bill profile for 2025-30 before inflation'
+const DEFAULT_SEARCHES = [
+  'bill profile for 2025-30',
+  'average household bill',
+  'household bill',
+]
 
 export default function MetricSelector({ metrics: metricsProp, value, onChange, defaultPriorityOnly = true }) {
   const { metrics: contextMetrics, searchMetrics } = useMetricData()
@@ -24,6 +28,7 @@ export default function MetricSelector({ metrics: metricsProp, value, onChange, 
   const [initialised, setInitialised] = useState(false)
   const containerRef = useRef(null)
   const inputRef = useRef(null)
+  const skipSyncRef = useRef(false)
 
   // Set default metric on first load if none selected
   useEffect(() => {
@@ -39,20 +44,30 @@ export default function MetricSelector({ metrics: metricsProp, value, onChange, 
           setDomain(m.taxonomy_domain)
         }
       }
+      skipSyncRef.current = true
       return
     }
     // No value yet — select default metric (household bill)
-    const def = allMetrics.find(x =>
-      x.is_svt_priority && x.name && x.name.toLowerCase().includes('bill profile for 2025-30')
-    )
+    let def = null
+    for (const search of DEFAULT_SEARCHES) {
+      def = allMetrics.find(x =>
+        x.is_svt_priority && x.name && x.name.toLowerCase().includes(search)
+      )
+      if (def) break
+    }
     if (def) {
       setDomain('__priority__')
+      skipSyncRef.current = true
       onChange(def.id)
     }
   }, [allMetrics, value, initialised, onChange])
 
   // Sync domain when value changes externally (e.g. navigation from MetricExplorer)
   useEffect(() => {
+    if (skipSyncRef.current) {
+      skipSyncRef.current = false
+      return
+    }
     if (!value || !allMetrics.length) return
     const m = allMetrics.find(x => x.id === value)
     if (!m) return
@@ -145,9 +160,10 @@ export default function MetricSelector({ metrics: metricsProp, value, onChange, 
         <div className="relative flex-1 min-w-0">
           <input
             ref={inputRef}
-            type="text"
+            type="search"
             autoComplete="off"
-            className="w-full px-3 py-2.5 text-sm bg-white text-[#2D2D2D] placeholder-[#6b6b6b] border-0 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#005030]"
+            name="metric-search"
+            className="w-full px-3 py-2.5 text-sm bg-white text-[#2D2D2D] placeholder-[#6b6b6b] border-0 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#005030] [&::-webkit-search-cancel-button]:hidden"
             placeholder={selectedMetric ? selectedMetric.name : 'Type to search metrics...'}
             value={query}
             onChange={e => { setQuery(e.target.value); setOpen(true) }}
