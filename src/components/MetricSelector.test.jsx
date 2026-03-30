@@ -22,23 +22,10 @@ const mockMetrics = [
 vi.mock('../hooks/useMetricData', () => ({
   useMetricData: () => ({
     metrics: mockMetrics,
-    metricMap: Object.fromEntries(mockMetrics.map(m => [m.id, m])),
-    domains: [...new Set(mockMetrics.map(m => m.taxonomy_domain))].sort(),
-    units: [...new Set(mockMetrics.map(m => m.unit))].sort(),
-    searchMetrics: (query, opts = {}) => {
-      let filtered = mockMetrics
-      if (opts.priorityOnly) filtered = filtered.filter(m => m.is_svt_priority)
-      if (opts.domain) filtered = filtered.filter(m => m.taxonomy_domain === opts.domain)
-      if (query) {
-        const q = query.toLowerCase()
-        filtered = filtered.filter(m => m.name.toLowerCase().includes(q) || (m.reference || '').toLowerCase().includes(q))
-      }
-      return filtered
-    },
   }),
 }))
 
-import MetricSelector from './MetricSelector'
+import MetricSelector, { findDefaultMetric } from './MetricSelector'
 
 describe('MetricSelector', () => {
   const onChange = vi.fn()
@@ -61,20 +48,23 @@ describe('MetricSelector', () => {
 
   it('renders with domain filter and metric dropdown', () => {
     renderSelector()
-    const select = screen.getByDisplayValue(/Priority metrics/)
-    expect(select).toBeInTheDocument()
+    expect(screen.getByDisplayValue(/Priority metrics/)).toBeInTheDocument()
     expect(screen.getByPlaceholderText(/Type to search/)).toBeInTheDocument()
   })
 
-  it('default state shows "Priority metrics" domain', () => {
+  it('default domain is "Priority metrics" — never overridden on mount', () => {
     renderSelector()
     expect(screen.getByDisplayValue(/Priority metrics/)).toBeInTheDocument()
+    // MetricSelector must NOT call onChange on mount — parent owns default
+    expect(onChange).not.toHaveBeenCalled()
   })
 
-  it('auto-selects default metric on mount when value is null', () => {
-    renderSelector()
-    // Should auto-select "Average household bill 2025-26" (first DEFAULT_PRIORITY_SEARCHES match)
-    expect(onChange).toHaveBeenCalledWith(7)
+  it('domain stays "Priority metrics" when parent sets a priority metric', () => {
+    const { rerender } = renderSelector({ value: null })
+    // Parent auto-selects a priority metric (simulating what Benchmarking does)
+    rerender(<MetricSelector value={7} onChange={onChange} />)
+    // Metric 7 (Average household bill) is priority — domain must stay __priority__
+    expect(screen.getByDisplayValue(/Priority metrics/)).toBeInTheDocument()
   })
 
   it('opening dropdown shows only priority metrics by default', () => {
@@ -84,7 +74,6 @@ describe('MetricSelector', () => {
     expect(screen.getByText('Modelled base costs water')).toBeInTheDocument()
     expect(screen.getByText('Leakage (Ml/d)')).toBeInTheDocument()
     expect(screen.getByText('C-MeX score')).toBeInTheDocument()
-    // Non-priority metrics should NOT be visible
     expect(screen.queryByText('Obscure cost metric A')).not.toBeInTheDocument()
     expect(screen.queryByText('Non-priority ODI metric')).not.toBeInTheDocument()
   })
@@ -93,7 +82,6 @@ describe('MetricSelector', () => {
     renderSelector()
     const input = screen.getByPlaceholderText(/Type to search/)
     fireEvent.focus(input)
-    // Domain group headers appear (also in select options, so use getAllByText)
     const caHeaders = screen.getAllByText('Cost assessment')
     expect(caHeaders.length).toBeGreaterThanOrEqual(2)
     const pcHeaders = screen.getAllByText('Performance commitments')
@@ -117,10 +105,8 @@ describe('MetricSelector', () => {
     fireEvent.change(domainSelect, { target: { value: '1. Cost Assessment' } })
     const input = screen.getByPlaceholderText(/Type to search/)
     fireEvent.focus(input)
-    // Should show cost assessment metrics including non-priority
     expect(screen.getByText('Obscure cost metric A')).toBeInTheDocument()
     expect(screen.getByText('Obscure cost metric B')).toBeInTheDocument()
-    // Should NOT show other domain metrics
     expect(screen.queryByText('Leakage (Ml/d)')).not.toBeInTheDocument()
     expect(screen.queryByText('Non-priority ODI metric')).not.toBeInTheDocument()
   })
@@ -130,7 +116,6 @@ describe('MetricSelector', () => {
     onChange.mockClear()
     const domainSelect = screen.getByDisplayValue(/Priority metrics/)
     fireEvent.change(domainSelect, { target: { value: '1. Cost Assessment' } })
-    // Should auto-select first recommended Cost Assessment metric
     expect(onChange).toHaveBeenCalled()
     const selectedId = onChange.mock.calls[0][0]
     const metric = mockMetrics.find(m => m.id === selectedId)
@@ -205,11 +190,8 @@ describe('MetricSelector', () => {
     fireEvent.change(domainSelect, { target: { value: '1. Cost Assessment' } })
     const input = screen.getByPlaceholderText(/Type to search/)
     fireEvent.focus(input)
-    // "Allowed totex AMP8" matches 'allowed totex'
     expect(screen.getByText('Allowed totex AMP8')).toBeInTheDocument()
-    // "Modelled base costs water" matches 'base cost'
     expect(screen.getByText('Modelled base costs water')).toBeInTheDocument()
-    // "Enhancement expenditure water" matches 'enhancement'
     expect(screen.getByText('Enhancement expenditure water')).toBeInTheDocument()
   })
 
@@ -220,7 +202,6 @@ describe('MetricSelector', () => {
     const input = screen.getByPlaceholderText(/Type to search/)
     fireEvent.focus(input)
     expect(screen.getByText(/All metrics/)).toBeInTheDocument()
-    // Non-recommended metrics appear in the all group
     expect(screen.getByText('Obscure cost metric A')).toBeInTheDocument()
   })
 
@@ -231,7 +212,6 @@ describe('MetricSelector', () => {
     const input = screen.getByPlaceholderText(/Type to search/)
     fireEvent.focus(input)
     fireEvent.change(input, { target: { value: 'Obscure' } })
-    // Recommended header should not appear during search
     expect(screen.queryByText(/Recommended/)).not.toBeInTheDocument()
   })
 
@@ -254,9 +234,22 @@ describe('MetricSelector', () => {
     const input = screen.getByPlaceholderText(/Type to search/)
     fireEvent.focus(input)
     expect(screen.getByText(/Recommended/)).toBeInTheDocument()
-    // "Allowed return on equity" matches 'allowed return'
     expect(screen.getByText('Allowed return on equity')).toBeInTheDocument()
-    // "Gearing ratio" matches 'gearing'
     expect(screen.getByText('Gearing ratio')).toBeInTheDocument()
+  })
+
+  // ── Exported helper ──
+
+  it('findDefaultMetric returns first matching priority metric', () => {
+    const id = findDefaultMetric(mockMetrics)
+    expect(id).toBe(7) // "Average household bill 2025-26"
+  })
+
+  it('findDefaultMetric falls back to first priority alphabetically', () => {
+    const noHouseholdBill = mockMetrics.filter(m => !m.name.toLowerCase().includes('household bill') && !m.name.toLowerCase().includes('bill profile'))
+    const id = findDefaultMetric(noHouseholdBill)
+    expect(id).not.toBeNull()
+    const metric = mockMetrics.find(m => m.id === id)
+    expect(metric.is_svt_priority).toBe(true)
   })
 })

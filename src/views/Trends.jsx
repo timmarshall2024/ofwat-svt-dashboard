@@ -4,7 +4,7 @@ import {
   LineChart, Line, XAxis, YAxis, Tooltip, Legend,
   ResponsiveContainer, CartesianGrid, ReferenceArea,
 } from 'recharts'
-import MetricSelector from '../components/MetricSelector'
+import MetricSelector, { findDefaultMetric } from '../components/MetricSelector'
 import CompanyBadge from '../components/CompanyBadge'
 import ContextPanel from '../components/ContextPanel'
 import LoadingSpinner from '../components/LoadingSpinner'
@@ -35,6 +35,13 @@ export default function Trends() {
   useEffect(() => {
     if (routeMetricId) setSelectedMetric(Number(routeMetricId))
   }, [routeMetricId])
+
+  // Auto-select default metric when metrics load (parent owns the default)
+  useEffect(() => {
+    if (selectedMetric != null || !metrics?.length) return
+    const id = findDefaultMetric(metrics)
+    if (id != null) setSelectedMetric(id)
+  }, [metrics, selectedMetric])
 
   const metricInfo = useMemo(() => {
     if (!metrics) return null

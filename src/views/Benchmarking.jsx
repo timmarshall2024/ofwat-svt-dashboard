@@ -4,7 +4,7 @@ import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ReferenceLine,
   ResponsiveContainer, Cell, CartesianGrid,
 } from 'recharts'
-import MetricSelector from '../components/MetricSelector'
+import MetricSelector, { findDefaultMetric } from '../components/MetricSelector'
 import ContextPanel from '../components/ContextPanel'
 import LoadingSpinner from '../components/LoadingSpinner'
 import { useData } from '../context/DataContext'
@@ -31,12 +31,19 @@ export default function Benchmarking() {
   const [sortAsc, setSortAsc] = useState(true)
   const [contextOpen, setContextOpen] = useState(false)
 
-  const { appointees } = useData()
+  const { appointees, metrics } = useData()
   const { data, loading, error } = useBenchmarkData(selectedMetric)
 
   useEffect(() => {
     if (routeMetricId) setSelectedMetric(Number(routeMetricId))
   }, [routeMetricId])
+
+  // Auto-select default metric when metrics load (parent owns the default)
+  useEffect(() => {
+    if (selectedMetric != null || !metrics?.length) return
+    const id = findDefaultMetric(metrics)
+    if (id != null) setSelectedMetric(id)
+  }, [metrics, selectedMetric])
 
   const years = useMemo(() => {
     if (!data) return []

@@ -23,6 +23,9 @@ const RECOMMENDED = {
 
 const DEFAULT_PRIORITY_SEARCHES = ['average household bill', 'household bill', 'bill profile']
 
+// Stable empty array to prevent effect re-fires from reference changes
+const EMPTY = []
+
 function matchesRecommended(metric, domain) {
   const searches = RECOMMENDED[domain]
   if (!searches) return false
@@ -42,7 +45,6 @@ function findDefaultForDomain(metrics, domain) {
     const sorted = pool.slice().sort((a, b) => (a.name || '').localeCompare(b.name || ''))
     return sorted[0]?.id ?? null
   }
-  // Specific domain — pick first recommended, else first alphabetically
   const domainMetrics = metrics.filter(m => m.taxonomy_domain === domain)
   const recs = RECOMMENDED[domain] || []
   for (const search of recs) {
@@ -53,64 +55,59 @@ function findDefaultForDomain(metrics, domain) {
   return sorted[0]?.id ?? null
 }
 
+/**
+ * Find the default priority metric for initial page load.
+ * Exported so parents (Benchmarking, Trends) can auto-select on mount.
+ */
+export function findDefaultMetric(metrics) {
+  if (!metrics?.length) return null
+  const priority = metrics.filter(m => m.is_svt_priority)
+  for (const search of DEFAULT_PRIORITY_SEARCHES) {
+    const found = priority.find(m => m.name && m.name.toLowerCase().includes(search))
+    if (found) return found.id
+  }
+  const sorted = priority.slice().sort((a, b) => (a.name || '').localeCompare(b.name || ''))
+  return sorted[0]?.id ?? null
+}
+
+/**
+ * Fully controlled metric selector.
+ *
+ * The parent owns the selected metric_id and passes it as `value`.
+ * MetricSelector renders the UI (domain filter + searchable dropdown)
+ * and calls `onChange(metricId)` when the user picks a metric or
+ * changes domain. It NEVER calls onChange from its own effects —
+ * default metric selection is the parent's responsibility.
+ */
 export default function MetricSelector({ value, onChange }) {
   const { metrics: contextMetrics } = useMetricData()
-  const allMetrics = contextMetrics || []
+  const allMetrics = contextMetrics || EMPTY
 
-  // Domain always starts at __priority__ — set directly, never overridden on mount
   const [domain, setDomain] = useState('__priority__')
   const [query, setQuery] = useState('')
   const [open, setOpen] = useState(false)
   const containerRef = useRef(null)
   const inputRef = useRef(null)
 
-  // Track whether we've done the one-time init (auto-select default or sync from route)
-  const didInitRef = useRef(false)
-  // Track previous value prop so sync effect only fires on actual changes
-  const prevValueRef = useRef(value)
-
-  // One-time init: when metrics first load, either auto-select default or sync
-  // domain from a routed value. Runs exactly once.
+  // Sync domain filter to match the selected metric.
+  // Fires when value or allMetrics change. No refs needed because
+  // MetricSelector never calls onChange from effects — so there is
+  // no parent→child→parent race to guard against.
   useEffect(() => {
-    if (didInitRef.current || !allMetrics.length) return
-    didInitRef.current = true
-
-    if (!value) {
-      // No metric selected — pick default for priority domain
-      const defaultId = findDefaultForDomain(allMetrics, '__priority__')
-      if (defaultId) {
-        prevValueRef.current = defaultId
-        onChange(defaultId)
-      }
-    } else {
-      // Value already set (e.g. from route param) — sync domain to match
-      const m = allMetrics.find(x => x.id === value)
-      if (m) {
-        if (m.is_svt_priority) {
-          // Already __priority__, no-op
-        } else if (m.taxonomy_domain) {
-          setDomain(m.taxonomy_domain)
-        }
-      }
-    }
-  }, [allMetrics.length]) // eslint-disable-line react-hooks/exhaustive-deps
-
-  // Sync domain when value changes externally (e.g. MetricExplorer → Benchmarking)
-  // Only fires on actual value changes, never on mount.
-  useEffect(() => {
-    if (prevValueRef.current === value) return
-    prevValueRef.current = value
     if (!value || !allMetrics.length) return
     const m = allMetrics.find(x => x.id === value)
     if (!m) return
+    // If the metric is already visible in the current domain, keep it
     if (domain === '__priority__' && m.is_svt_priority) return
+    if (domain === '__all__') return
     if (domain === m.taxonomy_domain) return
+    // Otherwise switch domain so the metric appears in the list
     if (m.is_svt_priority) {
       setDomain('__priority__')
     } else if (m.taxonomy_domain) {
       setDomain(m.taxonomy_domain)
     }
-  }, [value, allMetrics, domain])
+  }, [value, allMetrics]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -121,22 +118,19 @@ export default function MetricSelector({ value, onChange }) {
     return () => document.removeEventListener('mousedown', handleClick)
   }, [])
 
-  // Domain change: update domain, auto-select first metric, call onChange
+  // Domain change from user interaction: pick first metric, call onChange
   function handleDomainChange(newDomain) {
     setDomain(newDomain)
     setQuery('')
     setOpen(false)
     if (!allMetrics.length) return
     const defaultId = findDefaultForDomain(allMetrics, newDomain)
-    if (defaultId) {
-      prevValueRef.current = defaultId
-      onChange(defaultId)
-    }
+    if (defaultId != null) onChange(defaultId)
   }
 
   // Filtered metrics for current domain + search query
   const filteredMetrics = useMemo(() => {
-    if (!allMetrics.length) return []
+    if (!allMetrics.length) return EMPTY
     let filtered
     if (domain === '__priority__') {
       filtered = allMetrics.filter(m => m.is_svt_priority)
@@ -157,7 +151,6 @@ export default function MetricSelector({ value, onChange }) {
 
   // Group metrics for the dropdown list
   const groups = useMemo(() => {
-    // Priority view: group by domain (same as before)
     if (domain === '__priority__') {
       const byDomain = {}
       for (const m of filteredMetrics) {
@@ -175,7 +168,6 @@ export default function MetricSelector({ value, onChange }) {
         }))
     }
 
-    // All domains: flat alphabetical, no grouping
     if (domain === '__all__') {
       return [{
         header: null,
@@ -274,7 +266,6 @@ export default function MetricSelector({ value, onChange }) {
                           m.id === value ? 'bg-[#E8F5E9] font-medium' : ''
                         }`}
                         onClick={() => {
-                          prevValueRef.current = m.id
                           onChange(m.id)
                           setQuery('')
                           setOpen(false)
