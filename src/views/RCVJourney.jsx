@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react'
+import usePageTitle from '../hooks/usePageTitle'
 import {
   ComposedChart, Area, Bar, Line, XAxis, YAxis, CartesianGrid,
   Tooltip, ReferenceLine, ResponsiveContainer, PieChart, Pie, Cell,
@@ -77,6 +78,7 @@ function fmtBn(v) {
 }
 
 export default function RCVJourney() {
+  usePageTitle('RCV Journey')
   const [annualData, setAnnualData] = useState(null)
   const [amp8Data, setAmp8Data] = useState(null)
   const [pcData, setPcData] = useState(null)

@@ -1,5 +1,6 @@
 import { useState, useMemo, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
+import usePageTitle from '../hooks/usePageTitle'
 import { LineChart, Line, ResponsiveContainer } from 'recharts'
 import LoadingSpinner from '../components/LoadingSpinner'
 import ContextPanel from '../components/ContextPanel'
@@ -52,6 +53,7 @@ function RegulatoryContext({ slug, metricName, onOpenPanel }) {
 }
 
 export default function MetricExplorer() {
+  usePageTitle('Metric Explorer')
   const { svtSummary, loading: ctxLoading, loadSvtSummary } = useData()
   const { metrics, domains, units, searchMetrics } = useMetricData()
   const navigate = useNavigate()

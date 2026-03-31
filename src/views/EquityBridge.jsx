@@ -1,4 +1,5 @@
 import { useReducer, useEffect, useState, useCallback, useRef, useMemo } from 'react'
+import usePageTitle from '../hooks/usePageTitle'
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer, Cell, LineChart, Line, Legend, ReferenceLine,
@@ -100,6 +101,7 @@ function fmtM(v) {
 }
 
 export default function EquityBridge() {
+  usePageTitle('Equity Bridge')
   const [state, dispatch] = useReducer(reducer, initialState)
   const [amp8Data, setAmp8Data] = useState(null)
   const [annualActuals, setAnnualActuals] = useState(null)

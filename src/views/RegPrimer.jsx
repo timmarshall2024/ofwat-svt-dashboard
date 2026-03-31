@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import usePageTitle from '../hooks/usePageTitle'
 
 const GREEN = '#005030'
 const AMBER = '#F47321'
@@ -149,6 +150,7 @@ function ODIExplainer() {
 }
 
 export default function RegPrimer() {
+  usePageTitle('Regulatory Primer')
   const [ampSummary, setAmpSummary] = useState(null)
 
   useEffect(() => {

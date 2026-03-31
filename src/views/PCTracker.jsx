@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from 'react'
 import { Tooltip, ResponsiveContainer, LineChart, Line, YAxis } from 'recharts'
+import usePageTitle from '../hooks/usePageTitle'
 
 const GREEN = '#005030'
 const AMBER = '#F47321'
@@ -215,6 +216,7 @@ function PCCard({ pc }) {
 }
 
 export default function PCTracker() {
+  usePageTitle('PC Tracker')
   return (
     <div className="space-y-6">
       <div>

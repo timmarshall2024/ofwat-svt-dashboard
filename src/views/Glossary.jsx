@@ -1,6 +1,8 @@
 import { useState, useEffect, useMemo } from 'react'
+import usePageTitle from '../hooks/usePageTitle'
 
 export default function Glossary() {
+  usePageTitle('Glossary')
   const [terms, setTerms] = useState([])
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(true)

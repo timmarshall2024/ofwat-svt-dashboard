@@ -1,10 +1,11 @@
 import { useState, useMemo, useEffect, useCallback } from 'react'
 import { useParams } from 'react-router-dom'
+import usePageTitle from '../hooks/usePageTitle'
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ReferenceLine,
   ResponsiveContainer, Cell, CartesianGrid,
 } from 'recharts'
-import MetricSelector, { findDefaultMetric, findDefaultForDomain, displayName } from '../components/MetricSelector'
+import MetricSelector, { findDefaultMetric, displayName } from '../components/MetricSelector'
 import ContextPanel from '../components/ContextPanel'
 import LoadingSpinner from '../components/LoadingSpinner'
 import { useData } from '../context/DataContext'
@@ -20,9 +21,11 @@ function domainToSlug(domain) {
 }
 
 export default function Benchmarking() {
+  usePageTitle('Benchmarking')
   const { metricId: routeMetricId } = useParams()
 
-  const [domain, setDomain] = useState('__priority__')
+  const [mode, setMode] = useState('__priority__')
+  const [searchQuery, setSearchQuery] = useState('')
   const [selectedMetric, setSelectedMetric] = useState(
     routeMetricId ? Number(routeMetricId) : null
   )
@@ -46,29 +49,26 @@ export default function Benchmarking() {
     if (id != null) setSelectedMetric(id)
   }, [metrics, selectedMetric])
 
-  // Sync domain when metric is set from route and might not be in current domain
+  // If routed to a non-priority metric, switch to search mode once metrics load
   useEffect(() => {
-    if (!selectedMetric || !metrics?.length) return
-    const m = metrics.find(x => x.id === selectedMetric)
-    if (!m) return
-    if (domain === '__priority__' && m.is_svt_priority) return
-    if (domain === '__all__') return
-    if (domain === m.taxonomy_domain) return
-    if (m.is_svt_priority) {
-      setDomain('__priority__')
-    } else if (m.taxonomy_domain) {
-      setDomain(m.taxonomy_domain)
+    if (!routeMetricId || !metrics?.length) return
+    const m = metrics.find(x => x.id === Number(routeMetricId))
+    if (m && !m.is_svt_priority) {
+      setMode('__search__')
+      setSearchQuery(m.name || '')
     }
-  }, []) // Only on mount — not on every render
+  }, [metrics]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  function handleDomainChange(newDomain) {
-    setDomain(newDomain)
+  function handleModeChange(newMode) {
+    setMode(newMode)
+    setSearchQuery('')
     setContextOpen(false)
-    if (!metrics?.length) return
-    const defaultId = findDefaultForDomain(metrics, newDomain)
-    if (defaultId != null) {
-      setSelectedMetric(defaultId)
-      setSelectedYear(null)
+    if (newMode === '__priority__' && metrics?.length) {
+      const id = findDefaultMetric(metrics)
+      if (id != null) {
+        setSelectedMetric(id)
+        setSelectedYear(null)
+      }
     }
   }
 
@@ -85,7 +85,7 @@ export default function Benchmarking() {
   }, [data])
 
   useEffect(() => {
-    if (years.length && !selectedYear) setSelectedYear(years[years.length - 1])
+    if (years.length) setSelectedYear(years[years.length - 1])
   }, [years])
 
   const appointeeCodes = useMemo(() => new Set(appointees.map((a) => a.code)), [appointees])
@@ -136,10 +136,12 @@ export default function Benchmarking() {
           <p className="text-xs font-medium text-fs-text mb-2">Select metric</p>
           <MetricSelector
             metrics={metrics || []}
-            selectedDomain={domain}
-            onDomainChange={handleDomainChange}
+            mode={mode}
+            onModeChange={handleModeChange}
             selectedMetricId={selectedMetric}
             onMetricChange={handleMetricChange}
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
           />
         </div>
 

@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useData } from '../context/DataContext'
+import usePageTitle from '../hooks/usePageTitle'
 import LoadingSpinner from '../components/LoadingSpinner'
 import ContextPanel from '../components/ContextPanel'
 import { chartTheme } from '../styles/chartTheme'
@@ -195,6 +196,7 @@ function ScatterTooltip({ active, payload }) {
 }
 
 export default function SVTvsCMA() {
+  usePageTitle('SVT vs CMA')
   const { loading } = useData()
   const [contextSlug, setContextSlug] = useState(null)
   const [contextTopic, setContextTopic] = useState(null)

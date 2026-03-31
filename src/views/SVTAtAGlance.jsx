@@ -1,6 +1,7 @@
 import { useState, useMemo, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { useData } from '../context/DataContext'
+import usePageTitle from '../hooks/usePageTitle'
 import MetricCard from '../components/MetricCard'
 import ContextPanel from '../components/ContextPanel'
 import LoadingSpinner from '../components/LoadingSpinner'
@@ -24,6 +25,7 @@ function domainToSlug(domain) {
 }
 
 export default function SVTAtAGlance() {
+  usePageTitle('SVT at a Glance')
   const { priorityMetrics, loading } = useData()
   const [collapsed, setCollapsed] = useState({})
   const [contextSlug, setContextSlug] = useState(null)

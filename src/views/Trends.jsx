@@ -1,10 +1,11 @@
 import { useState, useMemo, useEffect, useCallback } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
+import usePageTitle from '../hooks/usePageTitle'
 import {
   LineChart, Line, XAxis, YAxis, Tooltip, Legend,
   ResponsiveContainer, CartesianGrid, ReferenceArea,
 } from 'recharts'
-import MetricSelector, { findDefaultMetric, findDefaultForDomain, displayName } from '../components/MetricSelector'
+import MetricSelector, { findDefaultMetric, displayName } from '../components/MetricSelector'
 import CompanyBadge from '../components/CompanyBadge'
 import ContextPanel from '../components/ContextPanel'
 import LoadingSpinner from '../components/LoadingSpinner'
@@ -21,9 +22,11 @@ function domainToSlug(domain) {
 }
 
 export default function Trends() {
+  usePageTitle('Trends')
   const { metricId: routeMetricId } = useParams()
 
-  const [domain, setDomain] = useState('__priority__')
+  const [mode, setMode] = useState('__priority__')
+  const [searchQuery, setSearchQuery] = useState('')
   const [selectedMetric, setSelectedMetric] = useState(
     routeMetricId ? Number(routeMetricId) : null
   )
@@ -37,34 +40,31 @@ export default function Trends() {
     if (routeMetricId) setSelectedMetric(Number(routeMetricId))
   }, [routeMetricId])
 
-  // Auto-select default metric when metrics first load
+  // Auto-select default metric — prefer 10918 (Average household bill) which has trend data
   useEffect(() => {
     if (selectedMetric != null || !metrics?.length) return
-    const id = findDefaultMetric(metrics)
-    if (id != null) setSelectedMetric(id)
+    const hasLeakage = metrics.some(m => m.id === 9865)
+    setSelectedMetric(hasLeakage ? 9865 : findDefaultMetric(metrics))
   }, [metrics, selectedMetric])
 
-  // Sync domain on mount if routed to a specific metric
+  // If routed to a non-priority metric, switch to search mode once metrics load
   useEffect(() => {
-    if (!selectedMetric || !metrics?.length) return
-    const m = metrics.find(x => x.id === selectedMetric)
-    if (!m) return
-    if (domain === '__priority__' && m.is_svt_priority) return
-    if (domain === '__all__') return
-    if (domain === m.taxonomy_domain) return
-    if (m.is_svt_priority) {
-      setDomain('__priority__')
-    } else if (m.taxonomy_domain) {
-      setDomain(m.taxonomy_domain)
+    if (!routeMetricId || !metrics?.length) return
+    const m = metrics.find(x => x.id === Number(routeMetricId))
+    if (m && !m.is_svt_priority) {
+      setMode('__search__')
+      setSearchQuery(m.name || '')
     }
-  }, []) // Only on mount
+  }, [metrics]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  function handleDomainChange(newDomain) {
-    setDomain(newDomain)
+  function handleModeChange(newMode) {
+    setMode(newMode)
+    setSearchQuery('')
     setContextOpen(false)
-    if (!metrics?.length) return
-    const defaultId = findDefaultForDomain(metrics, newDomain)
-    if (defaultId != null) setSelectedMetric(defaultId)
+    if (newMode === '__priority__' && metrics?.length) {
+      const hasBill = metrics.some(m => m.id === 10918)
+      setSelectedMetric(hasBill ? 10918 : findDefaultMetric(metrics))
+    }
   }
 
   function handleMetricChange(id) {
@@ -117,10 +117,12 @@ export default function Trends() {
           <p className="text-xs font-medium text-fs-text mb-2">Select metric</p>
           <MetricSelector
             metrics={metrics || []}
-            selectedDomain={domain}
-            onDomainChange={handleDomainChange}
+            mode={mode}
+            onModeChange={handleModeChange}
             selectedMetricId={selectedMetric}
             onMetricChange={handleMetricChange}
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
           />
         </div>
 
@@ -206,10 +208,19 @@ export default function Trends() {
             </ResponsiveContainer>
           </div>
         ) : (
-          !loading && (
-            <p className="text-fs-text-muted text-sm py-8 text-center">
-              No trend data available for this metric and company selection.
-            </p>
+          !loading && selectedMetric && (
+            <div className="rounded-fs-md border border-fs-border bg-fs-surface p-6 shadow-fs text-center">
+              <p className="text-fs-text-muted text-sm mb-3">
+                No historical trend data available for this metric.
+                Try viewing it in Benchmarking to compare across companies for a single year.
+              </p>
+              <Link
+                to={`/benchmarking/${selectedMetric}`}
+                className="inline-flex items-center gap-1 rounded-fs-sm bg-fs-primary text-white px-4 py-2 text-sm font-medium hover:bg-fs-primary/90 transition-colors"
+              >
+                View in Benchmarking &rarr;
+              </Link>
+            </div>
           )
         )}
       </div>
