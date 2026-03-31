@@ -28,21 +28,31 @@ export function DataProvider({ children }) {
   const trendCache = useRef({})
   const knowledgeCache = useRef({})
 
-  // Initial load: companies, metrics, priority_metrics, SVT trends, knowledge index
+  // Guard against StrictMode double-mount
+  const didFetch = useRef(false)
+
+  // Initial load — fetch metrics independently so one failure doesn't block all
   useEffect(() => {
+    if (didFetch.current) return
+    didFetch.current = true
+
+    // Metrics is the critical path — fetch and set state immediately
+    fetchJSON('/data/metrics.json')
+      .then((met) => setMetrics(met))
+      .catch((err) => setError(err.message))
+
+    // Fetch remaining files in parallel
     Promise.all([
       fetchJSON('/data/companies.json'),
-      fetchJSON('/data/metrics.json'),
       fetchJSON('/data/priority_metrics.json'),
-      fetchJSON('/data/trends/SVT.json'),
-      fetchJSON('/knowledge/index.json'),
+      fetchJSON('/data/trends/SVT.json').catch(() => null),
+      fetchJSON('/knowledge/index.json').catch(() => null),
     ])
-      .then(([comp, met, pm, svtTrends, ki]) => {
+      .then(([comp, pm, svtTrends, ki]) => {
         setCompanies(comp)
-        setMetrics(met)
         setPriorityMetrics(pm)
-        setKnowledgeIndex(ki)
-        trendCache.current['SVT'] = svtTrends
+        if (ki) setKnowledgeIndex(ki)
+        if (svtTrends) trendCache.current['SVT'] = svtTrends
         setLoading(false)
       })
       .catch((err) => {

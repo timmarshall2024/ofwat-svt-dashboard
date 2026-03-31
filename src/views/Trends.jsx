@@ -4,7 +4,7 @@ import {
   LineChart, Line, XAxis, YAxis, Tooltip, Legend,
   ResponsiveContainer, CartesianGrid, ReferenceArea,
 } from 'recharts'
-import MetricSelector, { findDefaultMetric } from '../components/MetricSelector'
+import MetricSelector, { findDefaultMetric, findDefaultForDomain } from '../components/MetricSelector'
 import CompanyBadge from '../components/CompanyBadge'
 import ContextPanel from '../components/ContextPanel'
 import LoadingSpinner from '../components/LoadingSpinner'
@@ -12,8 +12,6 @@ import { useData } from '../context/DataContext'
 import { useTrendData } from '../hooks/useTrendData'
 import { formatValue, sortPeriods } from '../utils/formatters'
 import { chartTheme } from '../styles/chartTheme'
-
-const DEFAULT_METRIC = null
 
 function domainToSlug(domain) {
   const d = (domain || '').toLowerCase()
@@ -24,24 +22,55 @@ function domainToSlug(domain) {
 
 export default function Trends() {
   const { metricId: routeMetricId } = useParams()
+
+  const [domain, setDomain] = useState('__priority__')
   const [selectedMetric, setSelectedMetric] = useState(
-    routeMetricId ? Number(routeMetricId) : DEFAULT_METRIC
+    routeMetricId ? Number(routeMetricId) : null
   )
   const [contextOpen, setContextOpen] = useState(false)
   const { appointees, metrics } = useData()
   const { trendsByCompany, loading, selectedCompanies, addCompany, removeCompany } =
     useTrendData(['SVT'])
 
+  // Route param sync
   useEffect(() => {
     if (routeMetricId) setSelectedMetric(Number(routeMetricId))
   }, [routeMetricId])
 
-  // Auto-select default metric when metrics load (parent owns the default)
+  // Auto-select default metric when metrics first load
   useEffect(() => {
     if (selectedMetric != null || !metrics?.length) return
     const id = findDefaultMetric(metrics)
     if (id != null) setSelectedMetric(id)
   }, [metrics, selectedMetric])
+
+  // Sync domain on mount if routed to a specific metric
+  useEffect(() => {
+    if (!selectedMetric || !metrics?.length) return
+    const m = metrics.find(x => x.id === selectedMetric)
+    if (!m) return
+    if (domain === '__priority__' && m.is_svt_priority) return
+    if (domain === '__all__') return
+    if (domain === m.taxonomy_domain) return
+    if (m.is_svt_priority) {
+      setDomain('__priority__')
+    } else if (m.taxonomy_domain) {
+      setDomain(m.taxonomy_domain)
+    }
+  }, []) // Only on mount
+
+  function handleDomainChange(newDomain) {
+    setDomain(newDomain)
+    setContextOpen(false)
+    if (!metrics?.length) return
+    const defaultId = findDefaultForDomain(metrics, newDomain)
+    if (defaultId != null) setSelectedMetric(defaultId)
+  }
+
+  function handleMetricChange(id) {
+    setSelectedMetric(id)
+    setContextOpen(false)
+  }
 
   const metricInfo = useMemo(() => {
     if (!metrics) return null
@@ -87,8 +116,11 @@ export default function Trends() {
         <div className="rounded-fs-md border border-fs-border bg-fs-surface p-4 shadow-fs mb-4">
           <p className="text-xs font-medium text-fs-text mb-2">Select metric</p>
           <MetricSelector
-            value={selectedMetric}
-            onChange={(id) => { setSelectedMetric(id); setContextOpen(false) }}
+            metrics={metrics || []}
+            selectedDomain={domain}
+            onDomainChange={handleDomainChange}
+            selectedMetricId={selectedMetric}
+            onMetricChange={handleMetricChange}
           />
         </div>
 

@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
+import MetricSelector, { findDefaultMetric, findDefaultForDomain, getMetricsForDomain } from './MetricSelector'
 
-// Mock the useMetricData hook
 const mockMetrics = [
   { id: 1, name: 'Modelled base costs water', reference: 'CA01', unit: '£m', taxonomy_domain: '1. Cost Assessment', is_svt_priority: true },
   { id: 2, name: 'Leakage (Ml/d)', reference: 'PC01', unit: 'Ml/d', taxonomy_domain: '2. Performance Commitments', is_svt_priority: true },
@@ -19,226 +19,107 @@ const mockMetrics = [
   { id: 302, name: 'Gearing ratio', reference: 'FR03', unit: '%', taxonomy_domain: '5. Financial Resilience', is_svt_priority: false },
 ]
 
-vi.mock('../hooks/useMetricData', () => ({
-  useMetricData: () => ({
-    metrics: mockMetrics,
-  }),
-}))
-
-import MetricSelector, { findDefaultMetric } from './MetricSelector'
-
 describe('MetricSelector', () => {
-  const onChange = vi.fn()
+  const onDomainChange = vi.fn()
+  const onMetricChange = vi.fn()
 
   beforeEach(() => {
-    onChange.mockClear()
+    onDomainChange.mockClear()
+    onMetricChange.mockClear()
   })
 
   function renderSelector(props = {}) {
     return render(
       <MetricSelector
-        value={null}
-        onChange={onChange}
+        metrics={mockMetrics}
+        selectedDomain="__priority__"
+        onDomainChange={onDomainChange}
+        selectedMetricId={null}
+        onMetricChange={onMetricChange}
         {...props}
       />
     )
   }
 
-  // ── Problem 1: Domain defaults ──
+  // ── Domain defaults ──
 
-  it('renders with domain filter and metric dropdown', () => {
+  it('renders with domain select showing Priority metrics', () => {
     renderSelector()
-    expect(screen.getByDisplayValue(/Priority metrics/)).toBeInTheDocument()
-    expect(screen.getByPlaceholderText(/Type to search/)).toBeInTheDocument()
+    expect(screen.getByDisplayValue('Priority metrics')).toBeInTheDocument()
   })
 
-  it('default domain is "Priority metrics" — never overridden on mount', () => {
+  it('does not call onDomainChange or onMetricChange on mount', () => {
     renderSelector()
-    expect(screen.getByDisplayValue(/Priority metrics/)).toBeInTheDocument()
-    // MetricSelector must NOT call onChange on mount — parent owns default
-    expect(onChange).not.toHaveBeenCalled()
+    expect(onDomainChange).not.toHaveBeenCalled()
+    expect(onMetricChange).not.toHaveBeenCalled()
   })
 
-  it('domain stays "Priority metrics" when parent sets a priority metric', () => {
-    const { rerender } = renderSelector({ value: null })
-    // Parent auto-selects a priority metric (simulating what Benchmarking does)
-    rerender(<MetricSelector value={7} onChange={onChange} />)
-    // Metric 7 (Average household bill) is priority — domain must stay __priority__
-    expect(screen.getByDisplayValue(/Priority metrics/)).toBeInTheDocument()
+  it('domain stays Priority metrics when parent sets a priority metric', () => {
+    const { rerender } = renderSelector({ selectedMetricId: null })
+    rerender(
+      <MetricSelector
+        metrics={mockMetrics}
+        selectedDomain="__priority__"
+        onDomainChange={onDomainChange}
+        selectedMetricId={7}
+        onMetricChange={onMetricChange}
+      />
+    )
+    expect(screen.getByDisplayValue('Priority metrics')).toBeInTheDocument()
   })
 
-  it('opening dropdown shows only priority metrics by default', () => {
+  it('metric dropdown shows only priority metrics when domain is __priority__', () => {
     renderSelector()
-    const input = screen.getByPlaceholderText(/Type to search/)
-    fireEvent.focus(input)
-    expect(screen.getByText('Modelled base costs water')).toBeInTheDocument()
-    expect(screen.getByText('Leakage (Ml/d)')).toBeInTheDocument()
-    expect(screen.getByText('C-MeX score')).toBeInTheDocument()
-    expect(screen.queryByText('Obscure cost metric A')).not.toBeInTheDocument()
-    expect(screen.queryByText('Non-priority ODI metric')).not.toBeInTheDocument()
+    const metricSelect = screen.getAllByRole('combobox')[1]
+    const options = Array.from(metricSelect.querySelectorAll('option')).filter(o => !o.disabled)
+    const names = options.map(o => o.textContent)
+    expect(names).toContain('Modelled base costs water (£m)')
+    expect(names).toContain('Leakage (Ml/d) (Ml/d)')
+    expect(names).not.toContain('Obscure cost metric A (£m)')
+    expect(names).not.toContain('Non-priority ODI metric (nr)')
   })
 
-  it('priority metrics are grouped by domain', () => {
-    renderSelector()
-    const input = screen.getByPlaceholderText(/Type to search/)
-    fireEvent.focus(input)
-    const caHeaders = screen.getAllByText('Cost assessment')
-    expect(caHeaders.length).toBeGreaterThanOrEqual(2)
-    const pcHeaders = screen.getAllByText('Performance commitments')
-    expect(pcHeaders.length).toBeGreaterThanOrEqual(2)
-  })
+  // ── Domain change ──
 
-  it('each option shows unit in muted text', () => {
+  it('selecting a domain calls onDomainChange', () => {
     renderSelector()
-    const input = screen.getByPlaceholderText(/Type to search/)
-    fireEvent.focus(input)
-    const unitEls = screen.getAllByText('£m')
-    expect(unitEls.length).toBeGreaterThan(0)
-    expect(screen.getByText('Ml/d')).toBeInTheDocument()
-  })
-
-  // ── Problem 2: Domain change populates dropdown ──
-
-  it('selecting a domain shows only metrics from that domain', () => {
-    renderSelector()
-    const domainSelect = screen.getByDisplayValue(/Priority metrics/)
+    const domainSelect = screen.getByDisplayValue('Priority metrics')
     fireEvent.change(domainSelect, { target: { value: '1. Cost Assessment' } })
-    const input = screen.getByPlaceholderText(/Type to search/)
-    fireEvent.focus(input)
-    expect(screen.getByText('Obscure cost metric A')).toBeInTheDocument()
-    expect(screen.getByText('Obscure cost metric B')).toBeInTheDocument()
-    expect(screen.queryByText('Leakage (Ml/d)')).not.toBeInTheDocument()
-    expect(screen.queryByText('Non-priority ODI metric')).not.toBeInTheDocument()
+    expect(onDomainChange).toHaveBeenCalledWith('1. Cost Assessment')
   })
 
-  it('domain change auto-selects first metric and calls onChange', () => {
-    renderSelector()
-    onChange.mockClear()
-    const domainSelect = screen.getByDisplayValue(/Priority metrics/)
-    fireEvent.change(domainSelect, { target: { value: '1. Cost Assessment' } })
-    expect(onChange).toHaveBeenCalled()
-    const selectedId = onChange.mock.calls[0][0]
-    const metric = mockMetrics.find(m => m.id === selectedId)
-    expect(metric.taxonomy_domain).toBe('1. Cost Assessment')
+  it('specific domain shows only metrics from that domain', () => {
+    renderSelector({ selectedDomain: '1. Cost Assessment' })
+    const metricSelect = screen.getAllByRole('combobox')[1]
+    const options = Array.from(metricSelect.querySelectorAll('option')).filter(o => !o.disabled)
+    const names = options.map(o => o.textContent)
+    expect(names).toContain('Obscure cost metric A (£m)')
+    expect(names).toContain('Obscure cost metric B (%)')
+    expect(names).toContain('Modelled base costs water (£m)')
+    expect(names).not.toContain('Leakage (Ml/d) (Ml/d)')
   })
 
-  it('selecting "All domains" shows all metrics and warning label', () => {
-    renderSelector()
-    const domainSelect = screen.getByDisplayValue(/Priority metrics/)
-    fireEvent.change(domainSelect, { target: { value: '__all__' } })
-    expect(screen.getByText(/Showing all .* metrics/)).toBeInTheDocument()
+  it('selecting All domains shows all metrics', () => {
+    renderSelector({ selectedDomain: '__all__' })
+    const metricSelect = screen.getAllByRole('combobox')[1]
+    const options = Array.from(metricSelect.querySelectorAll('option')).filter(o => !o.disabled)
+    expect(options.length).toBe(mockMetrics.length)
   })
 
-  // ── Search filtering ──
-
-  it('typing in metric dropdown filters options', () => {
-    renderSelector()
-    const input = screen.getByPlaceholderText(/Type to search/)
-    fireEvent.focus(input)
-    fireEvent.change(input, { target: { value: 'Leakage' } })
-    expect(screen.getByText('Leakage (Ml/d)')).toBeInTheDocument()
-    expect(screen.queryByText('C-MeX score')).not.toBeInTheDocument()
+  it('selecting a metric calls onMetricChange with the id', () => {
+    renderSelector({ selectedDomain: '__priority__' })
+    const metricSelect = screen.getAllByRole('combobox')[1]
+    fireEvent.change(metricSelect, { target: { value: '2' } })
+    expect(onMetricChange).toHaveBeenCalledWith(2)
   })
 
-  it('shows "No results" when search has no matches', () => {
-    renderSelector()
-    const input = screen.getByPlaceholderText(/Type to search/)
-    fireEvent.focus(input)
-    fireEvent.change(input, { target: { value: 'xyznonexistent' } })
-    expect(screen.getByText('No results')).toBeInTheDocument()
+  it('pre-selected metric is shown as selected in dropdown', () => {
+    renderSelector({ selectedMetricId: 2 })
+    const metricSelect = screen.getAllByRole('combobox')[1]
+    expect(metricSelect.value).toBe('2')
   })
 
-  it('onChange fires with correct metric_id when option selected', () => {
-    renderSelector()
-    const input = screen.getByPlaceholderText(/Type to search/)
-    fireEvent.focus(input)
-    fireEvent.click(screen.getByText('Leakage (Ml/d)'))
-    expect(onChange).toHaveBeenCalledWith(2)
-  })
-
-  // ── External value / route sync ──
-
-  it('pre-selected priority metric keeps domain at Priority metrics', () => {
-    renderSelector({ value: 2 })
-    expect(screen.getByDisplayValue(/Priority metrics/)).toBeInTheDocument()
-  })
-
-  it('pre-selected non-priority metric switches domain to correct domain', () => {
-    renderSelector({ value: 300 })
-    expect(screen.getByDisplayValue('Financial resilience')).toBeInTheDocument()
-  })
-
-  it('selected metric name shown as placeholder in search input', () => {
-    renderSelector({ value: 2 })
-    expect(screen.getByPlaceholderText('Leakage (Ml/d)')).toBeInTheDocument()
-  })
-
-  // ── Problem 3: Recommended metrics ──
-
-  it('shows "Recommended" group when a specific domain is selected', () => {
-    renderSelector()
-    const domainSelect = screen.getByDisplayValue(/Priority metrics/)
-    fireEvent.change(domainSelect, { target: { value: '1. Cost Assessment' } })
-    const input = screen.getByPlaceholderText(/Type to search/)
-    fireEvent.focus(input)
-    expect(screen.getByText(/Recommended/)).toBeInTheDocument()
-  })
-
-  it('recommended group contains matching metrics with green dot', () => {
-    renderSelector()
-    const domainSelect = screen.getByDisplayValue(/Priority metrics/)
-    fireEvent.change(domainSelect, { target: { value: '1. Cost Assessment' } })
-    const input = screen.getByPlaceholderText(/Type to search/)
-    fireEvent.focus(input)
-    expect(screen.getByText('Allowed totex AMP8')).toBeInTheDocument()
-    expect(screen.getByText('Modelled base costs water')).toBeInTheDocument()
-    expect(screen.getByText('Enhancement expenditure water')).toBeInTheDocument()
-  })
-
-  it('shows "All metrics" group below recommended', () => {
-    renderSelector()
-    const domainSelect = screen.getByDisplayValue(/Priority metrics/)
-    fireEvent.change(domainSelect, { target: { value: '1. Cost Assessment' } })
-    const input = screen.getByPlaceholderText(/Type to search/)
-    fireEvent.focus(input)
-    expect(screen.getByText(/All metrics/)).toBeInTheDocument()
-    expect(screen.getByText('Obscure cost metric A')).toBeInTheDocument()
-  })
-
-  it('recommended group hidden when searching', () => {
-    renderSelector()
-    const domainSelect = screen.getByDisplayValue(/Priority metrics/)
-    fireEvent.change(domainSelect, { target: { value: '1. Cost Assessment' } })
-    const input = screen.getByPlaceholderText(/Type to search/)
-    fireEvent.focus(input)
-    fireEvent.change(input, { target: { value: 'Obscure' } })
-    expect(screen.queryByText(/Recommended/)).not.toBeInTheDocument()
-  })
-
-  it('no recommended group for __priority__ or __all__ domains', () => {
-    renderSelector()
-    const input = screen.getByPlaceholderText(/Type to search/)
-    fireEvent.focus(input)
-    expect(screen.queryByText(/Recommended/)).not.toBeInTheDocument()
-
-    const domainSelect = screen.getByDisplayValue(/Priority metrics/)
-    fireEvent.change(domainSelect, { target: { value: '__all__' } })
-    fireEvent.focus(input)
-    expect(screen.queryByText(/Recommended/)).not.toBeInTheDocument()
-  })
-
-  it('Financial Resilience domain shows recommended metrics', () => {
-    renderSelector()
-    const domainSelect = screen.getByDisplayValue(/Priority metrics/)
-    fireEvent.change(domainSelect, { target: { value: '5. Financial Resilience' } })
-    const input = screen.getByPlaceholderText(/Type to search/)
-    fireEvent.focus(input)
-    expect(screen.getByText(/Recommended/)).toBeInTheDocument()
-    expect(screen.getByText('Allowed return on equity')).toBeInTheDocument()
-    expect(screen.getByText('Gearing ratio')).toBeInTheDocument()
-  })
-
-  // ── Exported helper ──
+  // ── Exported helpers ──
 
   it('findDefaultMetric returns first matching priority metric', () => {
     const id = findDefaultMetric(mockMetrics)
@@ -251,5 +132,29 @@ describe('MetricSelector', () => {
     expect(id).not.toBeNull()
     const metric = mockMetrics.find(m => m.id === id)
     expect(metric.is_svt_priority).toBe(true)
+  })
+
+  it('getMetricsForDomain returns priority metrics for __priority__', () => {
+    const result = getMetricsForDomain(mockMetrics, '__priority__')
+    expect(result.every(m => m.is_svt_priority)).toBe(true)
+    expect(result.length).toBe(7)
+  })
+
+  it('getMetricsForDomain returns all metrics for __all__', () => {
+    const result = getMetricsForDomain(mockMetrics, '__all__')
+    expect(result.length).toBe(mockMetrics.length)
+  })
+
+  it('getMetricsForDomain returns domain-filtered metrics', () => {
+    const result = getMetricsForDomain(mockMetrics, '1. Cost Assessment')
+    expect(result.every(m => m.taxonomy_domain === '1. Cost Assessment')).toBe(true)
+    expect(result.length).toBe(6) // 3 priority + 3 non-priority CA metrics
+  })
+
+  it('findDefaultForDomain picks first metric for a specific domain', () => {
+    const id = findDefaultForDomain(mockMetrics, '5. Financial Resilience')
+    expect(id).not.toBeNull()
+    const metric = mockMetrics.find(m => m.id === id)
+    expect(metric.taxonomy_domain).toBe('5. Financial Resilience')
   })
 })
