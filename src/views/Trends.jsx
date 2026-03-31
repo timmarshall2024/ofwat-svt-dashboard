@@ -4,7 +4,7 @@ import {
   LineChart, Line, XAxis, YAxis, Tooltip, Legend,
   ResponsiveContainer, CartesianGrid, ReferenceArea,
 } from 'recharts'
-import MetricSelector, { findDefaultMetric, findDefaultForDomain } from '../components/MetricSelector'
+import MetricSelector, { findDefaultMetric, findDefaultForDomain, displayName } from '../components/MetricSelector'
 import CompanyBadge from '../components/CompanyBadge'
 import ContextPanel from '../components/ContextPanel'
 import LoadingSpinner from '../components/LoadingSpinner'
@@ -149,7 +149,7 @@ export default function Trends() {
         {metricInfo && (
           <div className="mb-2 flex items-center gap-3">
             <div className="text-sm text-fs-text-muted">
-              <span className="font-heading font-bold text-fs-text">{metricInfo.name}</span>
+              <span className="font-heading font-bold text-fs-text">{displayName(metricInfo)}</span>
               {' \u00B7 '}
               {metricInfo.taxonomy_domain} {'\u00B7'} {unit}
             </div>

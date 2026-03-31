@@ -4,7 +4,7 @@ import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ReferenceLine,
   ResponsiveContainer, Cell, CartesianGrid,
 } from 'recharts'
-import MetricSelector, { findDefaultMetric, findDefaultForDomain } from '../components/MetricSelector'
+import MetricSelector, { findDefaultMetric, findDefaultForDomain, displayName } from '../components/MetricSelector'
 import ContextPanel from '../components/ContextPanel'
 import LoadingSpinner from '../components/LoadingSpinner'
 import { useData } from '../context/DataContext'
@@ -172,7 +172,7 @@ export default function Benchmarking() {
           <>
             <div className="mb-2 flex items-center gap-3">
               <div className="text-sm text-fs-text-muted">
-                <span className="font-heading font-bold text-fs-text">{data.name}</span>
+                <span className="font-heading font-bold text-fs-text">{displayName({ id: selectedMetric, name: data.name })}</span>
                 {' \u00B7 '}
                 {domainLabel(data.taxonomy_domain)} {'\u00B7'} {unit} {'\u00B7'} {selectedYear}
               </div>

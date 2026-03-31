@@ -20,22 +20,69 @@ const DOMAIN_OPTIONS = [
   { value: '6. Risk & Return', label: 'Risk & uncertainty' },
 ]
 
+// Clean display names for priority metrics (keyed by metric id)
+const DISPLAY_NAMES = {
+  10918: 'Average household bill (£/customer)',
+  13896: 'WaSC average bill — real (£)',
+  2114:  'Real WACC — post-tax (%)',
+  11221: 'Allowed return on RCV (%)',
+  2497:  'Leakage (Ml/d)',
+  1728:  'Leakage — PCL reduction (%)',
+  1829:  'Supply interruptions (mins)',
+  1982:  'Pollution incidents — PCL',
+  1359:  'Internal sewer flooding — PCL',
+  1849:  'External sewer flooding — PCL',
+  2429:  'Per capita consumption (%)',
+  1758:  'Mains repairs — PCL',
+  1766:  'Biodiversity — PCL',
+  2287:  'Storm overflow spills — PCL',
+  629:   'Compliance risk index',
+  1742:  'Modelled base costs — Water (£m)',
+  11953: 'Modelled base costs — Wastewater (£m)',
+  9563:  'Enhancement totex — Water (£m)',
+  9597:  'Enhancement totex — Wastewater (£m)',
+  9564:  'WINEP allowance (£m)',
+  9689:  'CPIH adjustment',
+  10784: 'Opening RCV — April 2025 (£m)',
+  14022: 'Total RCV — real (£m)',
+  11212: 'Notional gearing (%)',
+  11214: 'AICR (ratio)',
+  11216: 'FFO / net debt (%)',
+  9645:  'Net ODI P10 (% RoRE)',
+  10341: 'Net ODI P90 (% RoRE)',
+  56:    'C-MeX outperformance (£m)',
+  11835: 'D-MeX outperformance (£m)',
+}
+
+/** Get display name for a metric — uses clean name if available, appends unit for non-priority */
+export function displayName(metric) {
+  if (!metric) return ''
+  if (DISPLAY_NAMES[metric.id]) return DISPLAY_NAMES[metric.id]
+  const name = metric.name || ''
+  return metric.unit ? `${name} (${metric.unit})` : name
+}
+
 const DEFAULT_PRIORITY_SEARCHES = ['average household bill', 'household bill', 'bill profile']
 
 export function findDefaultMetric(metrics) {
   if (!metrics?.length) return null
-  const priority = metrics.filter(m => m.is_svt_priority)
+  const priority = metrics.filter(m => !!m.is_svt_priority)
   for (const search of DEFAULT_PRIORITY_SEARCHES) {
-    const found = priority.find(m => m.name && m.name.toLowerCase().includes(search))
+    const found = priority.find(m => {
+      const name = (DISPLAY_NAMES[m.id] || m.name || '').toLowerCase()
+      return name.includes(search)
+    })
     if (found) return found.id
   }
-  const sorted = priority.slice().sort((a, b) => (a.name || '').localeCompare(b.name || ''))
+  const sorted = priority.slice().sort((a, b) =>
+    displayName(a).localeCompare(displayName(b))
+  )
   return sorted[0]?.id ?? null
 }
 
 export function getMetricsForDomain(metrics, domain) {
   if (!metrics?.length) return []
-  if (domain === '__priority__') return metrics.filter(m => m.is_svt_priority)
+  if (domain === '__priority__') return metrics.filter(m => !!m.is_svt_priority)
   if (domain === '__all__') return metrics
   return metrics.filter(m => m.taxonomy_domain === domain)
 }
@@ -45,11 +92,16 @@ export function findDefaultForDomain(metrics, domain) {
   if (!pool.length) return null
   if (domain === '__priority__' || domain === '__all__') {
     for (const search of DEFAULT_PRIORITY_SEARCHES) {
-      const found = pool.find(m => m.name && m.name.toLowerCase().includes(search))
+      const found = pool.find(m => {
+        const name = (DISPLAY_NAMES[m.id] || m.name || '').toLowerCase()
+        return name.includes(search)
+      })
       if (found) return found.id
     }
   }
-  const sorted = pool.slice().sort((a, b) => (a.name || '').localeCompare(b.name || ''))
+  const sorted = pool.slice().sort((a, b) =>
+    displayName(a).localeCompare(displayName(b))
+  )
   return sorted[0]?.id ?? null
 }
 
@@ -70,7 +122,9 @@ export default function MetricSelector({
 }) {
   const metricsArray = Array.isArray(metrics) ? metrics : []
   const pool = getMetricsForDomain(metricsArray, selectedDomain)
-  const sorted = pool.slice().sort((a, b) => (a.name || '').localeCompare(b.name || ''))
+  const sorted = pool.slice().sort((a, b) =>
+    displayName(a).localeCompare(displayName(b))
+  )
 
   const isLoading = metricsArray.length === 0
 
@@ -106,7 +160,7 @@ export default function MetricSelector({
             )}
             {sorted.map(m => (
               <option key={m.id} value={String(m.id)}>
-                {m.name}{m.unit ? ` (${m.unit})` : ''}
+                {displayName(m)}
               </option>
             ))}
           </select>

@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
-import MetricSelector, { findDefaultMetric, findDefaultForDomain, getMetricsForDomain } from './MetricSelector'
+import MetricSelector, { findDefaultMetric, findDefaultForDomain, getMetricsForDomain, displayName } from './MetricSelector'
 
 const mockMetrics = [
   { id: 1, name: 'Modelled base costs water', reference: 'CA01', unit: '£m', taxonomy_domain: '1. Cost Assessment', is_svt_priority: true },
