@@ -23,8 +23,8 @@ const DISPLAY_NAMES = {
   11524: 'Modelled base costs — Wastewater (£m)',
   9564:  'WINEP allowance (£m)',
   9440:  'Enhancement totex — Wastewater (£m)',
-  1062:  'Enhancement totex — Water quality (£m)',
-  10822: 'Opening RCV — April 2025 (£m)',
+  9563:  'Enhancement totex — Water (£m)',
+  10784: 'Opening RCV — April 2025 (£m)',
   9865:  'Leakage (Ml/d)',
   3280:  'Water efficiency — uncapped (%)',
   11214: 'AICR (ratio)',
@@ -42,18 +42,14 @@ const DISPLAY_NAMES = {
   1944:  'Unplanned outage — PCL (%)',
   // 3. Outcomes & ODIs
   10341: 'Net ODI P90 (% RoRE)',
-  10118: 'P10 vs average PCL — Leakage (%)',
-  10186: 'P10 vs average PCL — Serious pollution (%)',
-  10254: 'P10 vs average PCL — Storm overflows',
-  10169: 'P10 vs average PCL — Total pollution',
-  9982:  'P10 vs average PCL — Supply interruptions (mins)',
   56:    'C-MeX outperformance (£m)',
+  191:   'D-MeX outperformance (£m)',
   9645:  'Net ODI P10 (% RoRE)',
   // 4. Price Determination
-  1660:  'Allowed totex — Wastewater (£m)',
-  1659:  'Allowed totex — Water (£m)',
+  10635: 'Allowed totex — Wastewater (£m)',
+  10633: 'Allowed totex — Water (£m)',
   // 5. Financial Resilience
-  14022: 'Total RCV — real (£m)',
+  14022: 'Closing RCV — March 2030 (£m)',
   // 6. Risk & Return
   20053: 'Cost of embedded debt (ratio)',
   2114:  'Real WACC — post-tax (%)',
