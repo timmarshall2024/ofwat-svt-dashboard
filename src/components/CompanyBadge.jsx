@@ -1,4 +1,6 @@
-export default function CompanyBadge({ code, onRemove }) {
+import { memo } from 'react'
+
+export default memo(function CompanyBadge({ code, onRemove }) {
   const isSvt = code === 'SVT' || code === 'SVE'
   return (
     <span
@@ -20,4 +22,4 @@ export default function CompanyBadge({ code, onRemove }) {
       )}
     </span>
   )
-}
+})

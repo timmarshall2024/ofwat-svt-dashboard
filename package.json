@@ -14,13 +14,14 @@
   "dependencies": {
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "react-router-dom": "6.28.0",
+    "react-router-dom": "^6.30.3",
     "recharts": "2.13.3"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@vitejs/plugin-react": "4.3.4",
+    "@vitest/coverage-v8": "^2.1.9",
     "autoprefixer": "10.4.20",
     "jsdom": "^29.0.1",
     "postcss": "8.4.49",

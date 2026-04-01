@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { formatValue, higherIsBetter } from '../utils/formatters'
 
 const WACC_NOMINAL_TOOLTIP =
@@ -19,7 +20,7 @@ function InfoIcon({ size = 3 }) {
   )
 }
 
-export default function MetricCard({ metric, onInfoClick }) {
+export default memo(function MetricCard({ metric, onInfoClick }) {
   const { canonical_name, svt_value, unit, sector_median, why_it_matters } = metric
 
   const nameLower = (canonical_name || '').toLowerCase()
@@ -106,4 +107,4 @@ export default function MetricCard({ metric, onInfoClick }) {
       )}
     </div>
   )
-}
+})

@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useEffect } from 'react'
 import { useKnowledge } from '../hooks/useKnowledge'
 
 const PDF_URLS = {
@@ -52,6 +52,12 @@ function WACCBuildupTable({ components }) {
 }
 
 export default function ContextPanel({ slug, topic, onClose }) {
+  useEffect(() => {
+    const handler = (e) => e.key === 'Escape' && onClose()
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  }, [onClose])
+
   const { data, loading, error } = useKnowledge(slug)
 
   const topicLower = (topic || '').toLowerCase()
