@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from 'react'
 import usePageTitle from '../hooks/usePageTitle'
+import { ACRONYMS } from '../utils/acronyms'
 
 export default function Glossary() {
   usePageTitle('Glossary')
@@ -28,6 +29,15 @@ export default function Glossary() {
           } catch { /* skip files that fail */ }
         }
 
+        // Add acronyms from the central dictionary
+        for (const [acronym, definition] of Object.entries(ACRONYMS)) {
+          allTerms.push({
+            term: acronym,
+            definition,
+            source: 'Regulatory terminology',
+          })
+        }
+
         // Deduplicate case-insensitive, keep first occurrence
         const seen = new Map()
         const deduped = []
@@ -44,7 +54,17 @@ export default function Glossary() {
         setTerms(deduped)
         setLoading(false)
       })
-      .catch(() => setLoading(false))
+      .catch(() => {
+        // If knowledge fetch fails, still show acronyms
+        const acronymTerms = Object.entries(ACRONYMS).map(([term, definition]) => ({
+          term,
+          definition,
+          source: 'Regulatory terminology',
+        }))
+        acronymTerms.sort((a, b) => a.term.localeCompare(b.term, 'en', { sensitivity: 'base' }))
+        setTerms(acronymTerms)
+        setLoading(false)
+      })
   }, [])
 
   const filtered = useMemo(() => {
@@ -123,7 +143,7 @@ export default function Glossary() {
 
       {filtered.length === 0 && (
         <div className="text-center py-12 text-fs-text-muted">
-          No terms matching "{search}"
+          No terms matching &ldquo;{search}&rdquo;
         </div>
       )}
     </div>

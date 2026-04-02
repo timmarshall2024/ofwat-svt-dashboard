@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
+import { MemoryRouter } from 'react-router-dom'
 import MetricRow from './MetricRow'
 
 const baseMetric = {
@@ -9,33 +10,41 @@ const baseMetric = {
   svt_value: 289.7,
   sector_median: 150,
   why_it_matters: 'Lower leakage reduces water waste',
+  svt_period: '2029-30',
+}
+
+function renderRow(metric, props = {}) {
+  return render(
+    <MemoryRouter>
+      <MetricRow metric={metric} {...props} />
+    </MemoryRouter>
+  )
 }
 
 describe('MetricRow', () => {
   it('renders metric name, value and unit', () => {
-    render(<MetricRow metric={baseMetric} />)
+    renderRow(baseMetric)
     expect(screen.getByText('Leakage')).toBeInTheDocument()
     expect(screen.getByText('289.7 Ml/d')).toBeInTheDocument()
     expect(screen.getByText('Ml/d')).toBeInTheDocument()
   })
 
   it('renders sector median with direction indicator', () => {
-    render(<MetricRow metric={baseMetric} />)
+    renderRow(baseMetric)
     expect(screen.getByText(/Sector:.*150\.0 Ml\/d/)).toBeInTheDocument()
-    // SVT above median for leakage → up triangle
     expect(screen.getByText('\u25B2')).toBeInTheDocument()
   })
 
   it('info icon click triggers onInfoClick', () => {
     const handler = vi.fn()
-    render(<MetricRow metric={baseMetric} onInfoClick={handler} />)
+    renderRow(baseMetric, { onInfoClick: handler })
     const btn = screen.getByLabelText('More info')
     fireEvent.click(btn)
     expect(handler).toHaveBeenCalledWith(baseMetric)
   })
 
   it('renders description text', () => {
-    render(<MetricRow metric={baseMetric} />)
+    renderRow(baseMetric)
     expect(screen.getByText('Lower leakage reduces water waste')).toBeInTheDocument()
   })
 
@@ -50,9 +59,30 @@ describe('MetricRow', () => {
       svt_value_label: 'Post-indexation & true-ups',
       rcv_difference_explanation: 'The difference reflects CPIH indexation.',
     }
-    render(<MetricRow metric={dualMetric} />)
+    renderRow(dualMetric)
     expect(screen.getByText('Post-indexation & true-ups')).toBeInTheDocument()
     expect(screen.getByText(/PR24 FD model/)).toBeInTheDocument()
     expect(screen.getByText(/£12.26bn/)).toBeInTheDocument()
+  })
+
+  it('displays the period label', () => {
+    renderRow(baseMetric)
+    expect(screen.getByText('2029-30')).toBeInTheDocument()
+  })
+
+  it('shows AMP8 total for totex metrics', () => {
+    const totexMetric = {
+      ...baseMetric,
+      canonical_name: 'Allowed totex — Water',
+      svt_period: '2025-30',
+    }
+    renderRow(totexMetric)
+    expect(screen.getByText('AMP8 total (2025-30)')).toBeInTheDocument()
+  })
+
+  it('shows PR24 FD when no period', () => {
+    const noPeriod = { ...baseMetric, svt_period: null }
+    renderRow(noPeriod)
+    expect(screen.getByText('PR24 FD')).toBeInTheDocument()
   })
 })

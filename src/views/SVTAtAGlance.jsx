@@ -6,6 +6,8 @@ import MetricRow from '../components/MetricRow'
 import ContextPanel from '../components/ContextPanel'
 import LoadingSpinner from '../components/LoadingSpinner'
 import { domainLabel } from '../utils/formatters'
+import useAcronymTracker from '../hooks/useAcronymTracker'
+import { AcronymText } from '../components/AcronymTooltip'
 
 const HEADLINES = [
   { label: 'Avg household bill 2025-26', value: '\u00A3463', sub: 'Severn Trent (SVE)' },
@@ -31,6 +33,7 @@ export default function SVTAtAGlance() {
   const [contextSlug, setContextSlug] = useState(null)
   const [contextTopic, setContextTopic] = useState(null)
   const [rcvNoteOpen, setRcvNoteOpen] = useState(false)
+  const tracker = useAcronymTracker()
 
   const grouped = useMemo(() => {
     if (!priorityMetrics) return []
@@ -85,7 +88,7 @@ export default function SVTAtAGlance() {
       </div>
 
       {/* Desktop sidebar */}
-      <aside className="no-print hidden md:block w-[200px] flex-shrink-0 fixed top-[64px] bottom-0 left-0 z-30 overflow-y-auto"
+      <aside className="no-print hidden md:block w-[200px] flex-shrink-0 fixed top-14 bottom-0 left-0 z-30 overflow-y-auto"
         style={{ backgroundColor: '#005030' }}
       >
         <nav className="py-3">
@@ -150,7 +153,7 @@ export default function SVTAtAGlance() {
           </button>
         </div>
         <p className="text-sm text-fs-text-muted mb-6">
-          Key metrics from the Ofwat PR24 Final Determination for Severn Trent Water
+          Key metrics from the Ofwat <AcronymText tracker={tracker}>PR24</AcronymText> Final Determination for Severn Trent Water
         </p>
 
         {/* Headline banner */}
@@ -162,7 +165,9 @@ export default function SVTAtAGlance() {
             >
               <div className="text-xs font-medium text-white/60 mb-1">{h.label}</div>
               <div className="text-2xl font-heading font-bold">{h.value}</div>
-              <div className="text-xs text-white/50 mt-1">{h.sub}</div>
+              <div className="text-xs text-white/50 mt-1">
+                <AcronymText tracker={tracker}>{h.sub}</AcronymText>
+              </div>
             </div>
           ))}
         </div>
@@ -176,10 +181,10 @@ export default function SVTAtAGlance() {
           <span className="text-fs-border">|</span>
           <span className="flex items-center gap-1.5">
             <span className="inline-block w-2 h-2 rounded-full bg-fs-success" />
-            <span className="text-fs-text">SVT accepted FD — <span className="font-bold text-fs-primary">not referred to CMA</span></span>
+            <span className="text-fs-text"><AcronymText tracker={tracker}>SVT accepted FD — not referred to CMA</AcronymText></span>
           </span>
           <span className="text-fs-border">|</span>
-          <span className="text-fs-text-muted">{'\u00A3'}15bn totex AMP8</span>
+          <span className="text-fs-text-muted">{'\u00A3'}15bn <AcronymText tracker={tracker}>totex</AcronymText> <AcronymText tracker={tracker}>AMP</AcronymText>8</span>
           <span className="text-fs-border">|</span>
           <span className="text-fs-text-muted">Plan quality: highest category</span>
         </div>
@@ -187,7 +192,7 @@ export default function SVTAtAGlance() {
         {/* Domain heading */}
         {currentDomain && (
           <h2 className="text-[18px] font-heading font-medium mb-3" style={{ color: '#005030' }}>
-            {domainLabel(currentDomain)}
+            <AcronymText tracker={tracker}>{domainLabel(currentDomain)}</AcronymText>
           </h2>
         )}
 

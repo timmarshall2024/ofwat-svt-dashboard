@@ -5,11 +5,24 @@ import { formatValue, higherIsBetter } from '../utils/formatters'
 const COE_REAL_VALUE = 5.10
 const COE_NOMINAL_VALUE = 7.06
 
+/** Format svt_period for display */
+function periodLabel(period, name) {
+  if (!period) return 'PR24 FD'
+  const n = (name || '').toLowerCase()
+  if (period === '2025-30') {
+    if (n.includes('totex') || n.includes('enhancement') || n.includes('winep') || n.includes('base cost') || n.includes('modelled base'))
+      return 'AMP8 total (2025-30)'
+    return 'AMP8 (2025-30)'
+  }
+  if (period === 'AMP8 avg') return 'AMP8 average'
+  return period
+}
+
 export default memo(function MetricRow({ metric, onInfoClick }) {
   const {
     canonical_name, svt_value, unit, sector_median, why_it_matters,
     svt_value_secondary, svt_value_secondary_label, svt_value_label,
-    rcv_difference_explanation,
+    rcv_difference_explanation, svt_period,
   } = metric
   const [secondaryExpanded, setSecondaryExpanded] = useState(false)
   const hasSecondary = svt_value_secondary != null
@@ -109,6 +122,9 @@ export default memo(function MetricRow({ metric, onInfoClick }) {
             </span>
           </div>
         )}
+        <div className="text-[10px] text-fs-text-muted" style={{ marginTop: 1 }}>
+          {periodLabel(svt_period, canonical_name)}
+        </div>
       </div>
 
       {/* RIGHT — Description column */}

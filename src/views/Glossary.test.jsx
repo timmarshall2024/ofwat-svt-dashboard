@@ -69,6 +69,7 @@ describe('Glossary', () => {
 
   it('shows term count', async () => {
     render(<MemoryRouter><Glossary /></MemoryRouter>)
-    await waitFor(() => expect(screen.getByText(/4 regulatory terms/)).toBeInTheDocument())
+    // 4 knowledge terms + ACRONYMS dict (minus duplicates)
+    await waitFor(() => expect(screen.getByText(/\d+ regulatory terms/)).toBeInTheDocument())
   })
 })

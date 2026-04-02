@@ -40,7 +40,7 @@ export default function NavBar() {
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-14 items-center gap-6">
           <div className="flex items-center gap-3 shrink-0">
-            <img src="/fox-stephens-logo.png" alt="Fox Stephens" className="h-8 w-auto" />
+            <img src={`${import.meta.env.BASE_URL}fox-stephens-logo.png`} alt="Fox Stephens" className="h-8 w-auto mr-1" />
             <span className="text-white/40 text-sm font-light">|</span>
             <span className="text-white font-heading text-sm tracking-wide whitespace-nowrap">
               Ofwat Regulatory Intelligence
