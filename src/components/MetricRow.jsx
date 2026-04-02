@@ -47,7 +47,7 @@ export default memo(function MetricRow({ metric, onInfoClick }) {
       {/* LEFT — Name column */}
       <div className="lg:w-[30%] flex-shrink-0 flex flex-col justify-center">
         <div className="flex items-center gap-1.5">
-          <span className="text-[13px] font-medium text-fs-primary leading-snug">
+          <span className="text-[15px] font-medium text-fs-primary leading-snug">
             {canonical_name}
           </span>
           {onInfoClick && (
@@ -114,7 +114,7 @@ export default memo(function MetricRow({ metric, onInfoClick }) {
       {/* RIGHT — Description column */}
       <div className="lg:w-[45%] flex flex-col justify-center">
         {why_it_matters && (
-          <p className="text-[12px] text-[#4a4a4a] leading-[1.4]">
+          <p className="text-[15px] text-[#4a4a4a] leading-[1.4]">
             {why_it_matters}
           </p>
         )}
