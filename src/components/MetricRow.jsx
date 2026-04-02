@@ -44,7 +44,36 @@ export default memo(function MetricRow({ metric, onInfoClick }) {
 
   return (
     <div className="flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-0 py-2.5 border-b border-[#f0f0f0] hover:bg-[#fafafa] transition-colors group">
-      {/* LEFT — Value column (clickable → Benchmarking) */}
+      {/* LEFT — Name column */}
+      <div className="lg:w-[30%] flex-shrink-0 flex flex-col justify-center">
+        <div className="flex items-center gap-1.5">
+          <span className="text-[14px] font-medium text-fs-primary leading-snug">
+            {canonical_name}
+          </span>
+          {onInfoClick && (
+            <button
+              onClick={(e) => { e.stopPropagation(); onInfoClick(metric) }}
+              className="w-5 h-5 rounded-full text-fs-border hover:text-fs-secondary hover:bg-fs-secondary-light flex items-center justify-center transition-colors opacity-0 group-hover:opacity-100 flex-shrink-0"
+              aria-label="More info"
+            >
+              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </button>
+          )}
+        </div>
+        {hasSecondary && (
+          <button
+            onClick={() => setSecondaryExpanded(!secondaryExpanded)}
+            className="flex items-center gap-1 text-[12px] text-fs-text-muted hover:text-fs-primary transition-colors mt-1 text-left"
+          >
+            <span>{svt_value_secondary_label || 'FD model'}: {formatValue(svt_value_secondary, unit)}</span>
+            <span className="text-[9px]">{secondaryExpanded ? '\u25B2' : '\u25BC'}</span>
+          </button>
+        )}
+      </div>
+
+      {/* MIDDLE — Value column (clickable → Benchmarking) */}
       <div className="lg:w-1/4 lg:min-w-[200px] flex-shrink-0">
         <Link
           to={`/benchmarking/${metric.metric_id}`}
@@ -79,35 +108,6 @@ export default memo(function MetricRow({ metric, onInfoClick }) {
               Sector: {formatValue(sector_median, unit)}
             </span>
           </div>
-        )}
-      </div>
-
-      {/* MIDDLE — Name column */}
-      <div className="lg:w-[30%] flex-shrink-0 flex flex-col justify-center">
-        <div className="flex items-center gap-1.5">
-          <span className="text-[14px] font-medium text-fs-primary leading-snug">
-            {canonical_name}
-          </span>
-          {onInfoClick && (
-            <button
-              onClick={(e) => { e.stopPropagation(); onInfoClick(metric) }}
-              className="w-5 h-5 rounded-full text-fs-border hover:text-fs-secondary hover:bg-fs-secondary-light flex items-center justify-center transition-colors opacity-0 group-hover:opacity-100 flex-shrink-0"
-              aria-label="More info"
-            >
-              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </button>
-          )}
-        </div>
-        {hasSecondary && (
-          <button
-            onClick={() => setSecondaryExpanded(!secondaryExpanded)}
-            className="flex items-center gap-1 text-[12px] text-fs-text-muted hover:text-fs-primary transition-colors mt-1 text-left"
-          >
-            <span>{svt_value_secondary_label || 'FD model'}: {formatValue(svt_value_secondary, unit)}</span>
-            <span className="text-[9px]">{secondaryExpanded ? '\u25B2' : '\u25BC'}</span>
-          </button>
         )}
       </div>
 
