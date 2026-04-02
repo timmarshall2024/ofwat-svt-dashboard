@@ -43,11 +43,11 @@ export default memo(function MetricRow({ metric, onInfoClick }) {
     : ''
 
   return (
-    <div className="flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-0 py-2.5 border-b border-[#f0f0f0] hover:bg-[#fafafa] transition-colors group">
+    <div className="flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-0 py-1.5 border-b border-[#f0f0f0] hover:bg-[#fafafa] transition-colors group">
       {/* LEFT — Name column */}
       <div className="lg:w-[30%] flex-shrink-0 flex flex-col justify-center">
         <div className="flex items-center gap-1.5">
-          <span className="text-[14px] font-medium text-fs-primary leading-snug">
+          <span className="text-[13px] font-medium text-fs-primary leading-snug">
             {canonical_name}
           </span>
           {onInfoClick && (
@@ -80,7 +80,7 @@ export default memo(function MetricRow({ metric, onInfoClick }) {
           title="View in Benchmarking"
           className="inline-flex items-baseline gap-1.5 cursor-pointer group/val hover:underline decoration-fs-primary/30 underline-offset-2"
         >
-          <span className="text-[20px] leading-none font-bold text-fs-primary font-heading">
+          <span className="text-[15px] leading-none font-bold text-fs-primary font-heading">
             {isCoE ? `${COE_REAL_VALUE}%` : formatValue(svt_value, unit)}
           </span>
           <span className="text-[11px] text-fs-text-muted">{displayUnit}</span>
@@ -98,7 +98,7 @@ export default memo(function MetricRow({ metric, onInfoClick }) {
           <div className="text-[10px] text-fs-text-muted">Nominal equiv. ~{COE_NOMINAL_VALUE}%</div>
         )}
         {sector_median != null && !isCoE && (
-          <div className="flex items-center gap-1 text-[12px]" style={{ marginTop: 2 }}>
+          <div className="flex items-center gap-1 text-[11px]" style={{ marginTop: 1 }}>
             {comparison && (
               <span className={`font-medium ${arrowColor}`}>
                 {comparison.above ? '\u25B2' : '\u25BC'}
@@ -114,7 +114,7 @@ export default memo(function MetricRow({ metric, onInfoClick }) {
       {/* RIGHT — Description column */}
       <div className="lg:w-[45%] flex flex-col justify-center">
         {why_it_matters && (
-          <p className="text-[14px] text-[#4a4a4a] leading-[1.5]">
+          <p className="text-[12px] text-[#4a4a4a] leading-[1.4]">
             {why_it_matters}
           </p>
         )}
