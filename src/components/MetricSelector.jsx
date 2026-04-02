@@ -1,6 +1,6 @@
 /**
  * MetricSelector — two modes:
- *   1. "Priority metrics" — shows 35 curated metrics in a dropdown
+ *   1. "Priority metrics" — shows 29 curated metrics in a dropdown
  *   2. "Search all metrics" — text search across all 6,063 metrics
  *
  * Props:
@@ -15,12 +15,13 @@
 
 import { useState, useRef, useEffect } from 'react'
 
-// Clean display names for the 35 DB priority metrics (keyed by metric id)
+// Clean display names for the 29 DB priority metrics (keyed by metric id)
 const DISPLAY_NAMES = {
   // 1. Cost Assessment
   10918: 'Average household bill (£/customer)',
   1742:  'Modelled base costs — Water (£m)',
   11524: 'Modelled base costs — Wastewater (£m)',
+  11516: 'Modelled base costs — Wastewater (£m)',
   9564:  'WINEP allowance (£m)',
   9440:  'Enhancement totex — Wastewater (£m)',
   9563:  'Enhancement totex — Water (£m)',
@@ -30,15 +31,15 @@ const DISPLAY_NAMES = {
   11214: 'AICR (ratio)',
   11216: 'FFO / net debt (%)',
   11212: 'Notional gearing (%)',
-  11221: 'Allowed return on RCV (%)',
+  11221: 'Return on capital — nominal (%)',
   // 2. Performance Commitments
   629:   'Compliance risk index',
   1759:  'Mains repairs — PCL (number)',
   1849:  'External sewer flooding (per 10k connections)',
   1359:  'Internal sewer flooding (per 10k connections)',
   2429:  'Per capita consumption (%)',
-  1711:  'Greenhouse gas emissions — Water (tCO2e)',
   1776:  'Biodiversity — PCL',
+  1781:  'Biodiversity — PCL',
   1944:  'Unplanned outage — PCL (%)',
   // 3. Outcomes & ODIs
   10341: 'Net ODI P90 (% RoRE)',
@@ -51,7 +52,7 @@ const DISPLAY_NAMES = {
   // 5. Financial Resilience
   14022: 'Closing RCV — March 2030 (£m)',
   // 6. Risk & Return
-  20053: 'Cost of embedded debt (ratio)',
+  20053: 'Cost of embedded debt — real (%)',
   2114:  'Real WACC — post-tax (%)',
 }
 

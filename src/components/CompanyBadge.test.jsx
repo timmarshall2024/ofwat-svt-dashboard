@@ -3,9 +3,9 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import CompanyBadge from './CompanyBadge'
 
 describe('CompanyBadge', () => {
-  it('renders company code', () => {
+  it('renders company label with name and code', () => {
     render(<CompanyBadge code="ANH" />)
-    expect(screen.getByText('ANH')).toBeInTheDocument()
+    expect(screen.getByText('Anglian (ANH)')).toBeInTheDocument()
   })
 
   it('applies highlight style for SVT', () => {
@@ -26,14 +26,14 @@ describe('CompanyBadge', () => {
   it('shows remove button for non-SVT with onRemove', () => {
     const onRemove = vi.fn()
     render(<CompanyBadge code="ANH" onRemove={onRemove} />)
-    const btn = screen.getByRole('button', { name: 'Remove ANH' })
+    const btn = screen.getByRole('button', { name: 'Remove Anglian (ANH)' })
     expect(btn).toBeInTheDocument()
   })
 
   it('calls onRemove when remove button clicked', () => {
     const onRemove = vi.fn()
     render(<CompanyBadge code="ANH" onRemove={onRemove} />)
-    fireEvent.click(screen.getByRole('button', { name: 'Remove ANH' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Remove Anglian (ANH)' }))
     expect(onRemove).toHaveBeenCalledWith('ANH')
   })
 

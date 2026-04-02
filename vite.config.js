@@ -2,6 +2,9 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
 export default defineConfig({
+  define: {
+    __DATA_VERSION__: JSON.stringify(Date.now().toString(36)),
+  },
   plugins: [react()],
   resolve: {
     preserveSymlinks: true,

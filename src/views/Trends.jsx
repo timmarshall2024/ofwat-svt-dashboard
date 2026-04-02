@@ -11,7 +11,7 @@ import ContextPanel from '../components/ContextPanel'
 import LoadingSpinner from '../components/LoadingSpinner'
 import { useData } from '../context/DataContext'
 import { useTrendData } from '../hooks/useTrendData'
-import { formatValue, sortPeriods } from '../utils/formatters'
+import { formatValue, sortPeriods, companyLabel } from '../utils/formatters'
 import { chartTheme } from '../styles/chartTheme'
 
 function domainToSlug(domain) {
@@ -140,7 +140,7 @@ export default function Trends() {
             >
               <option value="">+ Add company</option>
               {available.map((a) => (
-                <option key={a.code} value={a.code}>{a.code} {'\u2014'} {a.name}</option>
+                <option key={a.code} value={a.code}>{companyLabel(a.code)}</option>
               ))}
             </select>
           )}
@@ -198,6 +198,7 @@ export default function Trends() {
                     key={code}
                     type="monotone"
                     dataKey={code}
+                    name={companyLabel(code)}
                     stroke={code === 'SVT' || code === 'SVE' ? chartTheme.svtColor : chartTheme.palette[i % chartTheme.palette.length]}
                     strokeWidth={code === 'SVT' || code === 'SVE' ? 3 : 1.5}
                     dot={{ r: code === 'SVT' ? 3 : 2 }}

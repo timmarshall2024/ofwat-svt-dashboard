@@ -10,7 +10,7 @@ import ContextPanel from '../components/ContextPanel'
 import LoadingSpinner from '../components/LoadingSpinner'
 import { useData } from '../context/DataContext'
 import { useBenchmarkData } from '../hooks/useBenchmarkData'
-import { formatValue, domainLabel } from '../utils/formatters'
+import { formatValue, domainLabel, companyLabel } from '../utils/formatters'
 import { chartTheme } from '../styles/chartTheme'
 
 function domainToSlug(domain) {
@@ -221,7 +221,7 @@ export default function Benchmarking() {
                     const isSvt = row.company === 'SVT' || row.company === 'SVE'
                     return (
                       <tr key={row.company} className={`border-b border-fs-border/30 ${isSvt ? 'bg-fs-secondary-light font-medium' : ''}`}>
-                        <td className="py-1.5 pr-4">{row.company}</td>
+                        <td className="py-1.5 pr-4">{companyLabel(row.company)}</td>
                         <td className="py-1.5 pr-4 text-fs-text-muted">{row.type}</td>
                         <td className="py-1.5 pr-4 text-right font-mono">{formatValue(row.value, unit)}</td>
                         <td className="py-1.5 text-right font-mono">
@@ -256,12 +256,13 @@ function ChartPanel({ data, median, unit }) {
   return (
     <div className="rounded-fs-md border border-fs-border bg-fs-surface p-4 shadow-fs">
       <ResponsiveContainer width="100%" height={height}>
-        <BarChart data={data} layout="vertical" margin={{ left: 40, right: 20, top: 5, bottom: 5 }}>
+        <BarChart data={data} layout="vertical" margin={{ left: 10, right: 20, top: 5, bottom: 5 }}>
           <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke={chartTheme.gridColor} />
           <XAxis type="number" tick={{ fontSize: 11, fill: '#6b6b6b' }} />
-          <YAxis type="category" dataKey="company" tick={{ fontSize: 12, fill: '#2D2D2D' }} width={40} />
+          <YAxis type="category" dataKey="company" tickFormatter={companyLabel} tick={{ fontSize: 11, fill: '#2D2D2D' }} width={180} />
           <Tooltip
             formatter={(val) => [formatValue(val, unit), 'Value']}
+            labelFormatter={companyLabel}
             contentStyle={{ fontSize: 12, borderRadius: 6, border: `1px solid ${chartTheme.tooltipBorder}`, fontFamily: "'Times New Roman', serif" }}
           />
           {median != null && (

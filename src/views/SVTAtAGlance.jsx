@@ -8,7 +8,7 @@ import LoadingSpinner from '../components/LoadingSpinner'
 import { domainLabel } from '../utils/formatters'
 
 const HEADLINES = [
-  { label: 'Avg household bill 2025-26', value: '\u00A3463', sub: 'SVE appointee' },
+  { label: 'Avg household bill 2025-26', value: '\u00A3463', sub: 'Severn Trent (SVE)' },
   { label: 'Real WACC (post-tax)', value: '4.03%', sub: 'Nominal equiv. ~6.05%' },
   { label: 'ODI risk range', value: '-0.63% to +1.31%', sub: 'RoRE (P10 / P90)' },
   { label: 'Avg bill 2029-30', value: '\u00A3583', sub: 'End of AMP8' },

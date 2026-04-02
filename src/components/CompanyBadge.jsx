@@ -1,4 +1,5 @@
 import { memo } from 'react'
+import { companyLabel } from '../utils/formatters'
 
 export default memo(function CompanyBadge({ code, onRemove }) {
   const isSvt = code === 'SVT' || code === 'SVE'
@@ -10,12 +11,12 @@ export default memo(function CompanyBadge({ code, onRemove }) {
           : 'bg-fs-primary-light text-fs-text border border-fs-border'
       }`}
     >
-      {code}
+      {companyLabel(code)}
       {onRemove && !isSvt && (
         <button
           onClick={() => onRemove(code)}
           className="ml-0.5 hover:text-red-500 transition-colors"
-          aria-label={`Remove ${code}`}
+          aria-label={`Remove ${companyLabel(code)}`}
         >
           ×
         </button>

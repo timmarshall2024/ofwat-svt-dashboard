@@ -2,6 +2,9 @@ import { createContext, useContext, useState, useEffect, useCallback, useRef } f
 
 const DataContext = createContext(null)
 
+// Build-time cache buster — changes on every build so browsers fetch fresh data
+const DATA_VERSION = typeof __DATA_VERSION__ !== 'undefined' ? __DATA_VERSION__ : ''
+
 export function useData() {
   const ctx = useContext(DataContext)
   if (!ctx) throw new Error('useData must be inside DataProvider')
@@ -9,7 +12,8 @@ export function useData() {
 }
 
 async function fetchJSON(url) {
-  const res = await fetch(url)
+  const bustUrl = DATA_VERSION ? `${url}?v=${DATA_VERSION}` : url
+  const res = await fetch(bustUrl)
   if (!res.ok) throw new Error(`Failed to fetch ${url}: ${res.status}`)
   return res.json()
 }

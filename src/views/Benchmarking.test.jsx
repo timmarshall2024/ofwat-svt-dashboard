@@ -79,9 +79,9 @@ describe('Benchmarking view', () => {
         <Benchmarking />
       </MemoryRouter>
     )
-    expect(screen.getByText('SVT')).toBeInTheDocument()
-    expect(screen.getByText('ANH')).toBeInTheDocument()
-    expect(screen.getByText('SES')).toBeInTheDocument()
+    expect(screen.getByText('Severn Trent (SVT)')).toBeInTheDocument()
+    expect(screen.getByText('Anglian (ANH)')).toBeInTheDocument()
+    expect(screen.getByText('Sutton & East Surrey (SES)')).toBeInTheDocument()
   })
 
   it('highlights SVT row in the data table', () => {
@@ -90,7 +90,7 @@ describe('Benchmarking view', () => {
         <Benchmarking />
       </MemoryRouter>
     )
-    const svtRow = screen.getByText('SVT').closest('tr')
+    const svtRow = screen.getByText('Severn Trent (SVT)').closest('tr')
     expect(svtRow.className).toContain('bg-fs-secondary-light')
   })
 

@@ -53,10 +53,10 @@ describe('SVTvsCMA', () => {
         <SVTvsCMA />
       </MemoryRouter>
     )
-    expect(screen.getAllByText('Severn Trent').length).toBeGreaterThan(0)
-    expect(screen.getAllByText('Anglian').length).toBeGreaterThan(0)
-    expect(screen.getAllByText('Southern').length).toBeGreaterThan(0)
-    expect(screen.getAllByText('Wessex').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('Severn Trent (SVE)').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('Anglian (ANH)').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('Southern (SRN)').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('Wessex (WSX)').length).toBeGreaterThan(0)
   })
 
   it('renders scatter chart section', () => {

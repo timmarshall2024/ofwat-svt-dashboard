@@ -129,6 +129,36 @@ export function higherIsBetter(name, unit) {
 }
 
 /**
+ * Company display labels — "Name (CODE)" format, no "Water" in titles.
+ */
+const COMPANY_LABELS = {
+  AFW: 'Affinity (AFW)',
+  ANH: 'Anglian (ANH)',
+  BRL: 'Bristol (BRL)',
+  CAM: 'Cambridge (CAM)',
+  HDD: 'Hafren Dyfrdwy (HDD)',
+  NES: 'Northumbrian (NES)',
+  NNE: 'Northumbrian E&S (NNE)',
+  PRT: 'Portsmouth (PRT)',
+  SES: 'Sutton & East Surrey (SES)',
+  SEW: 'South East (SEW)',
+  SRN: 'Southern (SRN)',
+  SSC: 'South Staffs (SSC)',
+  SVE: 'Severn Trent (SVE)',
+  SVT: 'Severn Trent (SVT)',
+  SWB: 'South West (SWB)',
+  TMS: 'Thames (TMS)',
+  UUW: 'United Utilities (UUW)',
+  WSH: 'Dŵr Cymru (WSH)',
+  WSX: 'Wessex (WSX)',
+  YKY: 'Yorkshire (YKY)',
+}
+
+export function companyLabel(code) {
+  return COMPANY_LABELS[code] || code
+}
+
+/**
  * Company colours for charts — Fox Stephens brand palette.
  */
 const COMPANY_COLOURS = [

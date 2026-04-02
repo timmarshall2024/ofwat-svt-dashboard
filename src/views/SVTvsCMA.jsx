@@ -18,12 +18,12 @@ const CMA_CODES = ['ANH', 'NES', 'SEW', 'SRN', 'WSX']
 const ALL_CODES = ['SVE', ...CMA_CODES]
 
 const COMPANY_NAMES = {
-  SVE: 'Severn Trent',
-  ANH: 'Anglian',
-  NES: 'Northumbrian',
-  SEW: 'South East',
-  SRN: 'Southern',
-  WSX: 'Wessex',
+  SVE: 'Severn Trent (SVE)',
+  ANH: 'Anglian (ANH)',
+  NES: 'Northumbrian (NES)',
+  SEW: 'South East (SEW)',
+  SRN: 'Southern (SRN)',
+  WSX: 'Wessex (WSX)',
 }
 
 const CMA_OUTCOMES = {
@@ -154,12 +154,12 @@ const HEAD_TO_HEAD = [
  * PCC reduction % from baseline is a good measure of ambition.
  */
 const SCATTER_DATA = [
-  { code: 'SVE', name: 'Severn Trent', bill: 583, pccReduction: 8.6 },
-  { code: 'ANH', name: 'Anglian', bill: 631, pccReduction: 11.1 },
-  { code: 'NES', name: 'Northumbrian', bill: 585, pccReduction: 9.7 },
-  { code: 'SEW', name: 'South East', bill: 287, pccReduction: 9.1 },
-  { code: 'SRN', name: 'Southern', bill: 611, pccReduction: 7.8 },
-  { code: 'WSX', name: 'Wessex', bill: 607, pccReduction: 6.0 },
+  { code: 'SVE', name: 'Severn Trent (SVE)', bill: 583, pccReduction: 8.6 },
+  { code: 'ANH', name: 'Anglian (ANH)', bill: 631, pccReduction: 11.1 },
+  { code: 'NES', name: 'Northumbrian (NES)', bill: 585, pccReduction: 9.7 },
+  { code: 'SEW', name: 'South East (SEW)', bill: 287, pccReduction: 9.1 },
+  { code: 'SRN', name: 'Southern (SRN)', bill: 611, pccReduction: 7.8 },
+  { code: 'WSX', name: 'Wessex (WSX)', bill: 607, pccReduction: 6.0 },
 ].filter((d) => d.bill != null)
 
 function fmt(val, unit) {
@@ -377,7 +377,7 @@ export default function SVTvsCMA() {
                   r={7}
                 >
                   <LabelList
-                    dataKey="code"
+                    dataKey="name"
                     position="top"
                     offset={10}
                     style={{ fontSize: 10, fill: '#6b6b6b', fontWeight: 500 }}
