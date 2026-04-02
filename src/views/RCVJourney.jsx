@@ -155,11 +155,14 @@ export default function RCVJourney() {
   // AMP boundary x positions for chart
   const ampBoundaryYears = ['2009-10', '2014-15', '2019-20', '2024-25']
 
-  // Stat strip — use post-adjustment opening if available, else first year closing
+  // Stat strip — use post-adjustment opening, closing in both real and nominal
   const amp8Opening = amp8Data.opening_rcv_amp8 || amp8Data.years[0].rcv_nominal.total
-  const amp8Closing = amp8Data.years[amp8Data.years.length - 1].rcv_nominal.total
-  const amp8Growth = amp8Closing - amp8Opening
-  const amp8GrowthPct = (amp8Closing / amp8Opening - 1) * 100
+  const amp8ClosingNom = amp8Data.years[amp8Data.years.length - 1].rcv_nominal.total
+  const amp8ClosingReal = amp8Data.years[amp8Data.years.length - 1].rcv_real.total
+  const amp8GrowthReal = amp8ClosingReal - amp8Opening
+  const amp8GrowthNom = amp8ClosingNom - amp8Opening
+  const amp8GrowthPctReal = (amp8ClosingReal / amp8Opening - 1) * 100
+  const amp8GrowthPctNom = (amp8ClosingNom / amp8Opening - 1) * 100
 
   return (
     <div className="space-y-10">
@@ -258,9 +261,9 @@ export default function RCVJourney() {
               SVT's RCV grows each year primarily because new capital investment and inflation indexation
               outweigh regulatory depreciation. Over AMP8, the RCV is projected to grow from{' '}
               <span className="font-semibold text-fs-primary">£{(amp8Opening / 1000).toFixed(1)}bn</span> to{' '}
-              <span className="font-semibold text-fs-primary">£{(amp8Closing / 1000).toFixed(1)}bn</span>{' '}
-              — a <span className="font-semibold text-fs-primary">{amp8GrowthPct.toFixed(0)}%</span> increase
-              over five years.
+              <span className="font-semibold text-fs-primary">£{(amp8ClosingNom / 1000).toFixed(1)}bn</span> (nominal){' '}
+              — a <span className="font-semibold text-fs-primary">{amp8GrowthPctNom.toFixed(0)}%</span> increase
+              over five years ({amp8GrowthPctReal.toFixed(0)}% in real terms).
             </p>
           </>
         )}
@@ -383,17 +386,21 @@ export default function RCVJourney() {
         {/* Stat strip */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
           {[
-            { label: 'Opening RCV AMP8', value: fmtBn(amp8Opening) },
-            { label: 'Closing RCV AMP8', value: fmtBn(amp8Closing) },
-            { label: 'AMP8 growth', value: fmtBn(amp8Growth) },
-            { label: 'AMP8 growth %', value: `${amp8GrowthPct.toFixed(1)}%` },
+            { label: 'Opening RCV AMP8', value: fmtBn(amp8Opening), sub: 'Post-adjustment' },
+            { label: 'Closing RCV AMP8', value: fmtBn(amp8ClosingReal), sub: `Nominal: ${fmtBn(amp8ClosingNom)}` },
+            { label: 'AMP8 growth', value: fmtBn(amp8GrowthReal), sub: `Nominal: ${fmtBn(amp8GrowthNom)}` },
+            { label: 'AMP8 growth %', value: `${amp8GrowthPctReal.toFixed(0)}%`, sub: `Nominal: ${amp8GrowthPctNom.toFixed(0)}%` },
           ].map(s => (
             <div key={s.label} className="rounded-fs-md border border-fs-border bg-white p-3 shadow-fs text-center">
               <div className="text-xs text-fs-text-muted mb-1">{s.label}</div>
               <div className="text-xl font-heading font-bold text-fs-primary">{s.value}</div>
+              {s.sub && <div className="text-[10px] text-fs-text-muted mt-0.5">{s.sub}</div>}
             </div>
           ))}
         </div>
+        <p className="text-xs text-fs-text-muted mt-2 italic">
+          SVT targets ~59% nominal RCV growth assuming 3% inflation. Ofwat's modelled figure of 55% assumes a lower inflation rate.
+        </p>
       </section>
 
       {/* ── SECTION C: Price Control Breakdown ── */}

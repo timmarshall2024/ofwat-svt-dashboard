@@ -22,10 +22,10 @@ function InfoIcon({ size = 3 }) {
 
 export default memo(function MetricCard({ metric, onInfoClick }) {
   const { canonical_name, svt_value, unit, sector_median, why_it_matters,
-    svt_value_adjusted, svt_value_adjusted_label, svt_value_label,
+    svt_value_secondary, svt_value_secondary_label, svt_value_label,
     rcv_difference_explanation } = metric
-  const [adjustedExpanded, setAdjustedExpanded] = useState(false)
-  const hasAdjusted = svt_value_adjusted != null
+  const [secondaryExpanded, setSecondaryExpanded] = useState(false)
+  const hasSecondary = svt_value_secondary != null
 
   const nameLower = (canonical_name || '').toLowerCase()
   const isWACC = nameLower.includes('wacc')
@@ -71,29 +71,26 @@ export default memo(function MetricCard({ metric, onInfoClick }) {
         </span>
         <span className="text-xs text-fs-text-muted">{displayUnit}</span>
       </div>
-      {hasAdjusted && svt_value_label && (
+      {hasSecondary && svt_value_label && (
         <div className="text-[10px] text-fs-text-muted mb-1">{svt_value_label}</div>
       )}
-      {hasAdjusted && (
+      {hasSecondary && (
         <div className="mb-2">
           <button
-            onClick={() => setAdjustedExpanded(!adjustedExpanded)}
-            className="flex items-center gap-1.5 text-xs text-fs-secondary hover:text-fs-primary transition-colors"
+            onClick={() => setSecondaryExpanded(!secondaryExpanded)}
+            className="flex items-center gap-1.5 text-xs text-fs-text-muted hover:text-fs-primary transition-colors"
           >
-            <span className="font-medium">Incl. adjustments: {formatValue(svt_value_adjusted, unit)}</span>
-            <span className="text-[10px]">{adjustedExpanded ? '▲' : '▼'}</span>
+            <span>{svt_value_secondary_label || 'FD model'}: {formatValue(svt_value_secondary, unit)}</span>
+            <span className="text-[10px]">{secondaryExpanded ? '▲' : '▼'}</span>
           </button>
           <div
             className="overflow-hidden transition-all duration-200 ease-in-out"
-            style={{ maxHeight: adjustedExpanded ? 120 : 0, opacity: adjustedExpanded ? 1 : 0 }}
+            style={{ maxHeight: secondaryExpanded ? 120 : 0, opacity: secondaryExpanded ? 1 : 0 }}
           >
             {rcv_difference_explanation && (
               <p className="text-[11px] text-fs-text-muted italic leading-relaxed mt-1.5 pr-1">
                 {rcv_difference_explanation}
               </p>
-            )}
-            {svt_value_adjusted_label && (
-              <p className="text-[10px] text-fs-text-muted mt-1">{svt_value_adjusted_label}</p>
             )}
           </div>
         </div>
