@@ -1,4 +1,5 @@
 import { memo, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { formatValue, higherIsBetter } from '../utils/formatters'
 
 const COE_REAL_VALUE = 5.10
@@ -43,14 +44,21 @@ export default memo(function MetricRow({ metric, onInfoClick }) {
 
   return (
     <div className="flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-0 py-2.5 border-b border-[#f0f0f0] hover:bg-[#fafafa] transition-colors group">
-      {/* LEFT — Value column */}
+      {/* LEFT — Value column (clickable → Benchmarking) */}
       <div className="lg:w-1/4 lg:min-w-[200px] flex-shrink-0">
-        <div className="flex items-baseline gap-1.5">
+        <Link
+          to={`/benchmarking/${metric.metric_id}`}
+          title="View in Benchmarking"
+          className="inline-flex items-baseline gap-1.5 cursor-pointer group/val hover:underline decoration-fs-primary/30 underline-offset-2"
+        >
           <span className="text-[20px] leading-none font-bold text-fs-primary font-heading">
             {isCoE ? `${COE_REAL_VALUE}%` : formatValue(svt_value, unit)}
           </span>
           <span className="text-[11px] text-fs-text-muted">{displayUnit}</span>
-        </div>
+          <svg className="w-3 h-3 text-fs-primary opacity-0 group-hover/val:opacity-60 transition-opacity -translate-y-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 17L17 7M17 7H7M17 7v10" />
+          </svg>
+        </Link>
         {hasSecondary && svt_value_label && (
           <div className="text-[10px] text-fs-text-muted">{svt_value_label}</div>
         )}
