@@ -13,7 +13,7 @@ const NAVY = '#1e3a5f'
 // ── Reducer ──
 const initialState = {
   rcvSource: 'opening',
-  rcvCustom: 14781,
+  rcvCustom: 13518,
   gearing: 60,
   pension: 0,
   fairValueDebt: -200,
@@ -153,7 +153,7 @@ export default function EquityBridge() {
     }
   }, [selectedYear, annualActuals, groupBridge])
 
-  const amp8Opening = amp8Data?.years?.[0]?.rcv_nominal?.total || 14780.7
+  const amp8Opening = amp8Data?.opening_rcv_amp8 || amp8Data?.years?.[0]?.rcv_nominal?.total || 13518
   const amp8Closing = amp8Data?.years?.[amp8Data.years.length - 1]?.rcv_nominal?.total || 20889.8
 
   const rcv = state.rcvSource === 'opening' ? amp8Opening :

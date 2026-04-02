@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useMemo, useCallback, Fragment } from 'react'
 import { Link } from 'react-router-dom'
 import { useData } from '../context/DataContext'
 import usePageTitle from '../hooks/usePageTitle'
@@ -30,6 +30,7 @@ export default function SVTAtAGlance() {
   const [collapsed, setCollapsed] = useState({})
   const [contextSlug, setContextSlug] = useState(null)
   const [contextTopic, setContextTopic] = useState(null)
+  const [rcvNoteOpen, setRcvNoteOpen] = useState(false)
 
   const grouped = useMemo(() => {
     if (!priorityMetrics) return []
@@ -148,6 +149,7 @@ export default function SVTAtAGlance() {
                   const name = (m.canonical_name || '').toLowerCase()
                   const showRCVLink = name.includes('rcv') || name.includes('regulatory capital value')
                   const showWACCLink = name.includes('wacc') || name.includes('allowed return on capital')
+                  const isOpeningRCV = name.includes('opening rcv')
                   return (
                     <div key={`${m.metric_id}-${m.canonical_name}`}>
                       <MetricCard metric={m} onInfoClick={handleInfoClick} />
@@ -155,6 +157,27 @@ export default function SVTAtAGlance() {
                         <Link to="/learn/rcv-journey" className="block mt-1 text-[10px] text-fs-primary hover:underline">
                           See RCV history →
                         </Link>
+                      )}
+                      {isOpeningRCV && (
+                        <div className="mt-1">
+                          <button
+                            onClick={() => setRcvNoteOpen(!rcvNoteOpen)}
+                            className="inline-flex items-center gap-1 text-[10px] text-fs-text-muted hover:text-fs-primary transition-colors"
+                          >
+                            <span className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full border border-current text-[8px] leading-none">?</span>
+                            <span>Why two figures?</span>
+                          </button>
+                          <div
+                            className="overflow-hidden transition-all duration-200 ease-in-out"
+                            style={{ maxHeight: rcvNoteOpen ? 120 : 0, opacity: rcvNoteOpen ? 1 : 0 }}
+                          >
+                            <p className="text-[11px] text-gray-500 italic leading-relaxed mt-1">
+                              The PR24 FD model RCV (£12.26bn) is Ofwat's regulatory starting point. The adjusted
+                              figure (£13.52bn) includes CPIH indexation and AMP7 period-end reconciliations applied
+                              before AMP8 begins. For financial modelling, use the adjusted figure.
+                            </p>
+                          </div>
+                        </div>
                       )}
                       {showWACCLink && (
                         <Link to="/learn/equity-bridge" className="block mt-1 text-[10px] text-fs-primary hover:underline">

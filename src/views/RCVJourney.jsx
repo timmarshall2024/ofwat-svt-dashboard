@@ -104,8 +104,7 @@ export default function RCVJourney() {
   const amp8Avg = useMemo(() => {
     if (!amp8Data) return null
     const yrs = amp8Data.years
-    const avgAdditions = null // not available in bridge for AMP8
-    const opening = yrs[0].rcv_nominal.total
+    const opening = amp8Data.opening_rcv_amp8 || yrs[0].rcv_nominal.total
     const closing = yrs[yrs.length - 1].rcv_nominal.total
     return { opening, closing, growth: closing - opening, growthPct: ((closing / opening - 1) * 100) }
   }, [amp8Data])
@@ -156,8 +155,8 @@ export default function RCVJourney() {
   // AMP boundary x positions for chart
   const ampBoundaryYears = ['2009-10', '2014-15', '2019-20', '2024-25']
 
-  // Stat strip
-  const amp8Opening = amp8Data.years[0].rcv_nominal.total
+  // Stat strip — use post-adjustment opening if available, else first year closing
+  const amp8Opening = amp8Data.opening_rcv_amp8 || amp8Data.years[0].rcv_nominal.total
   const amp8Closing = amp8Data.years[amp8Data.years.length - 1].rcv_nominal.total
   const amp8Growth = amp8Closing - amp8Opening
   const amp8GrowthPct = (amp8Closing / amp8Opening - 1) * 100
