@@ -42,26 +42,26 @@ export default memo(function MetricRow({ metric, onInfoClick }) {
     : ''
 
   return (
-    <div className="flex flex-col lg:flex-row gap-2 lg:gap-0 py-3.5 border-b border-[#f0f0f0] hover:bg-[#fafafa] transition-colors group">
+    <div className="flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-0 py-2.5 border-b border-[#f0f0f0] hover:bg-[#fafafa] transition-colors group">
       {/* LEFT — Value column */}
       <div className="lg:w-1/4 lg:min-w-[200px] flex-shrink-0">
         <div className="flex items-baseline gap-1.5">
-          <span className="text-[28px] leading-tight font-bold text-fs-primary font-heading">
+          <span className="text-[20px] leading-none font-bold text-fs-primary font-heading">
             {isCoE ? `${COE_REAL_VALUE}%` : formatValue(svt_value, unit)}
           </span>
           <span className="text-[11px] text-fs-text-muted">{displayUnit}</span>
         </div>
         {hasSecondary && svt_value_label && (
-          <div className="text-[10px] text-fs-text-muted mt-0.5">{svt_value_label}</div>
+          <div className="text-[10px] text-fs-text-muted">{svt_value_label}</div>
         )}
         {isWACC && (
-          <div className="text-[10px] text-fs-text-muted mt-0.5">Nominal equiv. ~6.05%</div>
+          <div className="text-[10px] text-fs-text-muted">Nominal equiv. ~6.05%</div>
         )}
         {isCoE && (
-          <div className="text-[10px] text-fs-text-muted mt-0.5">Nominal equiv. ~{COE_NOMINAL_VALUE}%</div>
+          <div className="text-[10px] text-fs-text-muted">Nominal equiv. ~{COE_NOMINAL_VALUE}%</div>
         )}
         {sector_median != null && !isCoE && (
-          <div className="flex items-center gap-1 text-[12px] mt-1">
+          <div className="flex items-center gap-1 text-[12px]" style={{ marginTop: 2 }}>
             {comparison && (
               <span className={`font-medium ${arrowColor}`}>
                 {comparison.above ? '\u25B2' : '\u25BC'}
@@ -106,7 +106,7 @@ export default memo(function MetricRow({ metric, onInfoClick }) {
       {/* RIGHT — Description column */}
       <div className="lg:w-[45%] flex flex-col justify-center">
         {why_it_matters && (
-          <p className="text-[13px] text-[#6b6b6b] leading-[1.5]">
+          <p className="text-[14px] text-[#4a4a4a] leading-[1.5]">
             {why_it_matters}
           </p>
         )}

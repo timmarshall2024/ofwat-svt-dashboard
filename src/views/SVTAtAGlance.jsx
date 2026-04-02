@@ -126,10 +126,10 @@ export default function SVTAtAGlance() {
 
         {/* Metric rows grouped by domain */}
         {grouped.map(([domain, metrics]) => (
-          <div key={domain} className="mb-4">
+          <div key={domain} className="mb-2">
             <button
               onClick={() => toggle(domain)}
-              className="flex items-center gap-2 w-full text-left mb-1 mt-4 group"
+              className="flex items-center gap-2 w-full text-left mb-0.5 mt-3 group"
             >
               <span className="text-xs text-fs-text-muted transition-transform inline-block"
                 style={{ transform: collapsed[domain] ? 'rotate(-90deg)' : 'rotate(0deg)' }}
